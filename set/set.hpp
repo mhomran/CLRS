@@ -1,4 +1,40 @@
+#include <iostream>
+using namespace std;
+ 
+template <class T>
+class Pair {
+    int key;
+    T item;
+    public:
+    Pair() {
+        key = -1;
+    }
 
+    Pair(const Pair& s)
+    {
+        key = s.key;
+        item = s.item;
+    }
+
+    friend ostream & operator << (ostream &out, const Pair &c) {
+        out << c.key << "," << c.item;
+        return out;
+    }
+    int GetKey(void) {
+        return key;
+    }
+    void SetKey(int key) {
+        this->key = key;
+    }
+    T GetItem(void) {
+        return item;
+    }
+    void SetItem(T item) {
+        this->item = item;
+    }
+};
+
+template <class T>
 class Set {
     public:
     /**
@@ -7,21 +43,21 @@ class Set {
      * @param X 
      * @param size 
      */
-    virtual void Build(int X[], int size) = 0;
+    virtual void Build(Pair<T> X[], int size) = 0;
 
     /**
      * @brief return the stored item with key k
      * 
      * @param k 
      */
-    virtual void Find(int k) = 0;
+    virtual Pair<T> Find(int k) = 0;
 
     /**
      * @brief add x to set (replace item with key x.key if one already exists) 
      * 
-     * @param k 
+     * @param x
      */
-    virtual void Insert(int k) = 0;
+    virtual void Insert(Pair<T> x) = 0;
 
     /**
      * @brief remove and return the stored item with key k
@@ -34,27 +70,27 @@ class Set {
      * @brief return the stored item with smallest key
      * 
      */
-    virtual void FindMin(void) = 0;
+    virtual Pair<T> FindMin(void) = 0;
 
     /**
      * @brief return the stored item with largest key
      * 
      */
-    virtual void FindMax(void) = 0;
+    virtual Pair<T> FindMax(void) = 0;
 
     /**
      * @brief return the stored item with smallest key larger than k
      * 
      * @param k 
      */
-    virtual void FindNext(int k) = 0;
+    virtual Pair<T> FindNext(int k) = 0;
 
     /**
      * @brief return the stored item with largest key smaller than k
      * 
      * @param k 
      */
-    virtual void FindPrev(int k) = 0;
+    virtual Pair<T> FindPrev(int k) = 0;
 
     /**
      * @brief Print the Set

@@ -1,71 +1,171 @@
 #include "set.hpp"
 #include "../sequence/array_seq.hpp"
 
-class SortedArraySet : public Set {
-    ArraySeq A;
+template <class T>
+class SortedArraySet {
+    ArraySeq<Pair<T>> array;
+    
+    /**
+     * @brief Binary search through the array
+     * 
+     * @param k 
+     * @return int 
+     */
+    int BinarySearch(int k) {
+        int i, j, p;
+
+        i = 0;
+        j = array.GetSize()-1;
+        while(j >= i) {
+            p = (i + j) / 2;
+            if(array.GetAt(p).GetKey() == k) {
+                break;
+            } else if(array.GetAt(p).GetKey() > k) {
+                j = p - 1;
+            } else {
+                i = p + 1;
+            }
+        }
+
+        return p;
+    }
 
     public:
-    SortedArraySet();
-    ~SortedArraySet();
-    
     /**
      * @brief given an iterable X, build set from items in X
      * 
      * @param X 
      * @param size 
      */
-    virtual void Build(int X[], int size);
+    virtual void Build(Pair<T> X[], int size) {
+        // TODO: implement a sorting algorithm
+        array.Build(X, size);
+    }
 
     /**
      * @brief return the stored item with key k
      * 
      * @param k 
      */
-    virtual void Find(int k);
+    virtual Pair<T> Find(int k) {
+        Pair<T> res;
+        int i;
+        res.SetKey(-1);
+        i = BinarySearch(k);
+        if(array.GetAt(i).GetKey() == k) {
+            res = array.GetAt(i);
+        }
+        return res;
+    }
 
     /**
      * @brief add x to set (replace item with key x.key if one already exists) 
      * 
-     * @param k 
+     * @param x
      */
-    virtual void Insert(int k);
+    virtual void Insert(Pair<T> x) {
+        int i;
+        i = BinarySearch(x.GetKey());
+        cout << i << " " << array.GetAt(i).GetKey() << endl;
+        if(array.GetAt(i).GetKey() == x.GetKey()) {
+            array.GetAt(i).SetItem(x.GetItem());
+        } else if (array.GetAt(i).GetKey() < x.GetKey()) {
+            array.InsertAt(i+1, x);
+        } else {
+            array.InsertAt(i, x);
+        }
+    }
 
     /**
      * @brief remove and return the stored item with key k
      * 
      * @param k 
      */
-    virtual void Delete(int k);
+    virtual void Delete(int k) {
+        int i;
+        i = BinarySearch(k);
+        if(array.GetAt(i).GetKey() == k) {
+            array.DeleteAt(i);
+        } 
+    }
 
     /**
      * @brief return the stored item with smallest key
      * 
      */
-    virtual void FindMin(void);
+    virtual Pair<T> FindMin(void) {
+        Pair<T> res;
+        res.SetKey(-1);
+        if(array.GetSize() > 0) {
+            res = array.GetAt(0);
+        }
+        return res;
+    }
 
     /**
      * @brief return the stored item with largest key
      * 
      */
-    virtual void FindMax(void);
+    virtual Pair<T> FindMax(void) {
+        Pair<T> res;
+        res.SetKey(-1);
+        if(array.GetSize() > 0) {
+            res = array.GetAt(array.GetSize()-1);
+        }
+        return res;
+    }
 
     /**
      * @brief return the stored item with smallest key larger than k
      * 
      * @param k 
      */
-    virtual void FindNext(int k);
-
-    /**
-     * @brief Print the Set
-     * 
-     */
-    virtual void Print(void);
+    virtual Pair<T> FindNext(int k) {
+        Pair<T> res;
+        int i;
+        res.SetKey(-1);
+        i = BinarySearch(k);
+        if(array.GetAt(i).GetKey() <= k) {
+            if(i + 1 < array.GetSize()) {
+                res = array.GetAt(i+1);
+            }
+        } else {
+            res = array.GetAt(i);
+        }
+        return res;
+    }
 
     /**
      * @brief return the stored item with largest key smaller than k
      * 
      * @param k 
      */
-    virtual void FindPrev(int k);
+    virtual Pair<T> FindPrev(int k) {
+        Pair<T> res;
+        int i;
+        res.SetKey(-1);
+        i = BinarySearch(k);
+        if(array.GetAt(i).GetKey() >= k) {
+            if(i - 1 < array.GetSize()) {
+                res = array.GetAt(i - 1);
+            }
+        } else {
+            res = array.GetAt(i);
+        }
+        return res;
+    }
+
+    /**
+     * @brief Print the Set
+     * 
+     */
+    virtual void Print(void) {
+        array.Print();
+    }
+
+    /**
+     * @brief Destroy the Set object
+     * 
+     */
+    virtual ~SortedArraySet() {};
 };
