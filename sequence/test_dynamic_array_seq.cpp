@@ -3,7 +3,7 @@
 using namespace std;
 
 int main() {
-    DynamicArraySeq* A = new DynamicArraySeq();
+    DynamicArraySeq<int>* A = new DynamicArraySeq<int>();
     int i;
     int X[7];
     for(i = 0; i < 7; i++) {
@@ -37,8 +37,16 @@ int main() {
     A->DeleteLast();
     A->Print();
     
+    cout << "testing InsertAt(7, 25) (last element):\n";
+    A->InsertAt(7, 25);
+    A->Print();
+
     cout << "testing InsertAt(3, 20):\n";
     A->InsertAt(3, 20);
+    A->Print();
+
+    cout << "testing InsertAt(10, 80) (out of range):\n";
+    A->InsertAt(10, 80);
     A->Print();
 
     cout << "testing DeleteAt(3):\n";

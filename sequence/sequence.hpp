@@ -1,3 +1,4 @@
+template <class T> 
 class Sequence {
     public:
 
@@ -6,15 +7,15 @@ class Sequence {
      * 
      * @param X 
      */
-    virtual void Build(int X[], int size) = 0;
+    virtual void Build(T X[], int size) = 0;
 
     /**
      * @brief Get the item at i
      * 
      * @param i 
-     * @return int 
+     * @return T 
      */
-    virtual int GetAt(int i) = 0;
+    virtual T GetAt(int i) = 0;
 
     /**
      * @brief Set the item x at i
@@ -22,14 +23,14 @@ class Sequence {
      * @param i 
      * @return int 
      */
-    virtual void SetAt(int i, int x) = 0;
+    virtual void SetAt(int i, T x) = 0;
 
     /**
      * @brief Insert Item at the beginning of the sequence
      * 
      * @param x 
      */
-    virtual void InsertFirst(int x) = 0;
+    virtual void InsertFirst(T x) = 0;
 
     /**
      * @brief Delete item at the beginning of the sequence
@@ -42,7 +43,7 @@ class Sequence {
      * 
      * @param x 
      */
-    virtual void InsertLast(int x) = 0;
+    virtual void InsertLast(T x) = 0;
 
     /**
      * @brief Delete item at the end of the sequence
@@ -55,7 +56,7 @@ class Sequence {
      * 
      * @param x 
      */
-    virtual void InsertAt(int i, int x) = 0;
+    virtual void InsertAt(int i, T x) = 0;
 
     /**
      * @brief Delete Item at the i index of the sequence

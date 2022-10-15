@@ -3,7 +3,7 @@
 using namespace std;
 
 int main() {
-    LinkedListSeq* A = new LinkedListSeq();
+    LinkedListSeq<int>* A = new LinkedListSeq<int>();
     int i;
     int X[7];
     for(i = 0; i < 7; i++) {
