@@ -1,5 +1,4 @@
-#include <iostream>
-using namespace std;
+#include "../sequence/sequence.hpp"
 
 class MergeSort {
 
@@ -12,7 +11,7 @@ class MergeSort {
     }
 
     template <class T>
-    static void Merge(T A[], int a, int b) {
+    static void Merge(Sequence<T>& A, int a, int b) {
         int c;
         T* L; int L_size;
         T* R; int R_size;
@@ -25,27 +24,26 @@ class MergeSort {
         R_size = b - c; R = new T[R_size];
 
         for(i = a; i <= c; i++) {
-            L[i-a] = A[i];
+            L[i-a] = A.GetAt(i);
         }
         for(i = c+1; i <= b; i++) {
-            R[i-c-1] = A[i];
+            R[i-c-1] = A.GetAt(i);
         }
-
 
         x = 0;
         y = 0;
         for(i = a; i <= b; i++) {
             if(x >= L_size){
-                A[i] = R[y];
+                A.SetAt(i, R[y]);
                 y++;
             } else if (y >= R_size) {
-                A[i] = L[x];
+                A.SetAt(i, L[x]);
                 x++;
             } else if (L[x] < R[y]) {
-                A[i] = L[x];
+                A.SetAt(i, L[x]);
                 x++;
             } else {
-                A[i] = R[y];
+                A.SetAt(i, R[y]);
                 y++;
             }
         }
@@ -56,9 +54,10 @@ class MergeSort {
     public:
     
     template <class T>
-    static void Sort(T A[], int a, int b) {
+    static void Sort(Sequence<T>& A, int a, int b) {
+        int c;
         if (a < b) {
-            int c = (a + b) / 2;
+            c = (a + b) / 2;
             Sort(A, a, c);
             Sort(A, c+1, b);
             Merge(A, a, b);

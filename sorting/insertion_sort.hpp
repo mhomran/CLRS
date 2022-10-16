@@ -1,27 +1,22 @@
+#include "../sequence/sequence.hpp"
+
 class InsertionSort {
 
-    template <class T>
-    static void Swap(T* A, T* B) {
-        T temp;
-        temp = *A;
-        *A = *B;
-        *B = temp;
-    }
     public:
     
     template <class T>
-    static void Sort(T A[], int size) {
+    static void Sort(Sequence<T>& A) {
         int i;
         int j;
         T temp;
-        for(i = 1; i < size; i++) {
-            temp = A[i];
+        for(i = 1; i < A.GetSize(); i++) {
+            temp = A.GetAt(i);
             j = i - 1;
-            while(j >= 0 && A[j] > temp) {
-                A[j+1] = A[j];
+            while(j >= 0 && A.GetAt(j) > temp) {
+                A.SetAt(j+1, A.GetAt(j));
                 j -= 1;
             }
-            A[j+1] = temp;
+            A.SetAt(j+1, temp);
         }
     }
 };

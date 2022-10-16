@@ -1,25 +1,24 @@
+#include "../sequence/sequence.hpp"
+
 class SelectionSort {
 
-    template <class T>
-    static void Swap(T* A, T* B) {
-        T temp;
-        temp = *A;
-        *A = *B;
-        *B = temp;
-    }
     public:
     
     template <class T>
-    static void Sort(T A[], int size) {
+    static void Sort(Sequence<T>& A) {
         int i;
         int m;
         int j;
-        for(i = size - 1; i > 0; i--) {
+        T temp;
+
+        for(i = A.GetSize() - 1; i > 0; i--) {
             m = i;
             for(j = i - 1; j >= 0; j--) {
-                if(A[m] < A[j]) m = j;
+                if(A.GetAt(m) < A.GetAt(j)) m = j;
             }
-            Swap(&A[i], &A[m]);
+            temp = A.GetAt(i);
+            A.SetAt(i, A.GetAt(m));
+            A.SetAt(m, temp);
         }
     }
 };
