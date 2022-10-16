@@ -20,6 +20,31 @@ class Pair {
         out << c.key << "," << c.item;
         return out;
     }
+
+    int operator>(Pair<T>R) {
+        return key > R.key;
+    }
+
+    int operator<(Pair<T>R) {
+        return key < R.key;
+    }
+
+    int operator>=(Pair<T>R) {
+        return key >= R.key;
+    }
+
+    int operator<=(Pair<T>R) {
+        return key <= R.key;
+    }
+
+    int operator==(Pair<T>R) {
+        return key == R.key;
+    }
+
+    int operator!=(Pair<T>R) {
+        return key != R.key;
+    }
+
     int GetKey(void) {
         return key;
     }

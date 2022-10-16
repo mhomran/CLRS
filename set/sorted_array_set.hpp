@@ -1,5 +1,6 @@
 #include "set.hpp"
 #include "../sequence/array_seq.hpp"
+#include "../sorting/merge_sort.hpp"
 
 template <class T>
 class SortedArraySet {
@@ -38,8 +39,8 @@ class SortedArraySet {
      * @param size 
      */
     virtual void Build(Pair<T> X[], int size) {
-        // TODO: implement a sorting algorithm
         array.Build(X, size);
+        MergeSort::Sort(array, 0, array.GetSize());
     }
 
     /**

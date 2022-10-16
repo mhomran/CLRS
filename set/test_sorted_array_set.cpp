@@ -1,20 +1,21 @@
 #include <iostream>
-#include <string>
 #include "sorted_array_set.hpp"
 using namespace std;
 
 int main(void) {
-    SortedArraySet<string>* A = new SortedArraySet<string>();
+    SortedArraySet<int>* A = new SortedArraySet<int>();
     int i;
-    Pair<string> X[7];
-    Pair<string> x;
-    string str = "hey";
-    x.SetKey(3);
-    x.SetItem("NewlyAdded");
+    Pair<int> X[7];
+    Pair<int> x;
+    int Keys[] = { 9, 2, 3, 7, 5, 6, 8, 1, 0 };
+    int Keys_size = sizeof(Keys)/sizeof(Keys[0]);
 
-    for(i = 0; i < 7; i++) {
-        X[i].SetKey(i*2);
-        X[i].SetItem("hey");
+    x.SetKey(3);
+    x.SetItem(700);
+
+    for(i = 0; i < Keys_size; i++) {
+        X[i].SetKey(Keys[i]);
+        X[i].SetItem(700);
     }
 
     cout << "Testing Build(X, 7):\n";
