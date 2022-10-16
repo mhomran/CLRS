@@ -1,3 +1,5 @@
+#pragma once
+
 template <class T> 
 class Sequence {
     public:
@@ -64,6 +66,12 @@ class Sequence {
      * @param x 
      */
     virtual void DeleteAt(int i) = 0;
+    
+    /**
+     * @brief Get the size of the sequence
+     * 
+     */
+    virtual int GetSize(void) = 0;
 
     /**
      * @brief print the sequence

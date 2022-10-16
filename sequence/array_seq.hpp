@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include <cstddef>
 #include "sequence.hpp"
@@ -208,7 +210,7 @@ class ArraySeq : public Sequence<T> {
      * 
      * @return int 
      */
-    int GetSize(void) {
+    virtual int GetSize(void) {
         return size;
     }
 };
