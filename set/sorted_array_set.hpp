@@ -40,7 +40,7 @@ class SortedArraySet {
      */
     virtual void Build(Pair<T> X[], int size) {
         array.Build(X, size);
-        MergeSort::Sort(array, 0, array.GetSize());
+        MergeSort::Sort(array, 0, array.GetSize()-1);
     }
 
     /**
