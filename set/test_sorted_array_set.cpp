@@ -10,9 +10,6 @@ int main(void) {
     int Keys[] = { 9, 2, 3, 7, 5, 6, 8, 1, 0 };
     int Keys_size = sizeof(Keys)/sizeof(Keys[0]);
 
-    x.SetKey(3);
-    x.SetItem(700);
-
     for(i = 0; i < Keys_size; i++) {
         X[i].SetKey(Keys[i]);
         X[i].SetItem(700);
@@ -49,7 +46,15 @@ int main(void) {
     cout << "Testing FindMax():\n";
     cout << A->FindMax() << endl;
 
-    cout << "Testing Insert(x):\n";
+    x.SetKey(3);
+    x.SetItem(500);
+    cout << "Testing Insert(x) x is (3, 500):\n";
+    A->Insert(x);
+    A->Print();
+
+    x.SetKey(4);
+    x.SetItem(700);
+    cout << "Testing Insert(x) x is (4, 700):\n";
     A->Insert(x);
     A->Print();
 

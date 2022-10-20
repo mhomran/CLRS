@@ -67,9 +67,8 @@ class SortedArraySet {
     virtual void Insert(Pair<T> x) {
         int i;
         i = BinarySearch(x.GetKey());
-        cout << i << " " << array.GetAt(i).GetKey() << endl;
         if(array.GetAt(i).GetKey() == x.GetKey()) {
-            array.GetAt(i).SetItem(x.GetItem());
+            array.SetAt(i, x);
         } else if (array.GetAt(i).GetKey() < x.GetKey()) {
             array.InsertAt(i+1, x);
         } else {
