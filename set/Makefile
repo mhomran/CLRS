@@ -1,7 +1,11 @@
 SEQ_DIR=../sequence
 SORT_DIR=../sorting
 
-all: sorted_array_set.exe
+all: array_set.exe sorted_array_set.exe
+
+array_set.exe: set.hpp array_set.hpp test_array_set.cpp \
+${SEQ_DIR}/sequence.hpp ${SEQ_DIR}/array_seq.hpp
+	g++ test_array_set.cpp -o array_set.exe
 
 sorted_array_set.exe: set.hpp sorted_array_set.hpp test_sorted_array_set.cpp \
 ${SEQ_DIR}/sequence.hpp ${SEQ_DIR}/array_seq.hpp \
