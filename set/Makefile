@@ -3,7 +3,7 @@ SORT_DIR=../sorting
 
 all: array_set.exe sorted_array_set.exe direct_access_array_set.exe
 
-array_set.exe: set.hpp array_set.hpp test_array_set.cpp \
+array_set.exe: set.hpp set_from_seq.hpp test_array_set.cpp \
 ${SEQ_DIR}/sequence.hpp ${SEQ_DIR}/array_seq.hpp
 	g++ test_array_set.cpp -o array_set.exe
 

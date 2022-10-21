@@ -3,9 +3,9 @@
 #include "../sequence/array_seq.hpp"
 #include "../sorting/merge_sort.hpp"
 
-template <class T>
-class ArraySet {
-    ArraySeq<Pair<T>> array;
+template <class T, class S>
+class SetFromSeq {
+    S array;
 
     int Abs(int a) {
         if (a > 0) return a;
@@ -211,5 +211,5 @@ class ArraySet {
      * @brief Destroy the Set object
      * 
      */
-    virtual ~ArraySet() {};
+    virtual ~SetFromSeq() {};
 };

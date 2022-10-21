@@ -1,9 +1,10 @@
 #include <iostream>
-#include "array_set.hpp"
+#include "set_from_seq.hpp"
+#include "../sequence/linked_list_seq.hpp"
 using namespace std;
 
-int main(void) {
-    ArraySet<int>* A = new ArraySet<int>();
+int main(void) { 
+    SetFromSeq<int, LinkedListSeq<Pair<int>>>* A = new SetFromSeq<int, LinkedListSeq<Pair<int>>>();
     int i;
     Pair<int> X[7];
     Pair<int> x;
