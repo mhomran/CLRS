@@ -6,9 +6,48 @@
 using namespace std;
 
 template <class T> 
+class ArraySeqIter {
+    
+    Sequence<T>* seq;
+    int i;
+
+    public: 
+
+    public:
+    ArraySeqIter() {}
+    ~ArraySeqIter() {}
+
+    void SetSeq(Sequence<T>* seq) {
+        this->seq = seq;
+    }
+    void SetIndex(int i) {
+        this->i = i;
+    }
+
+    T operator*(void) {
+        return seq->GetAt(i);
+    }
+    void operator++(void) {
+        i++;
+    }
+    void operator++(int) {
+        i++;
+    }
+    bool operator==(ArraySeqIter<T> B) {
+        return this->seq == B.seq && this->i == B.i;
+    }
+    bool operator!=(ArraySeqIter<T> B) {
+        return this->seq != B.seq || this->i != B.i;
+    }
+};
+
+template <class T> 
 class ArraySeq : public Sequence<T> {
     T* array;
     int size;
+
+    ArraySeqIter<T> begin;
+    ArraySeqIter<T> end;
 
     public:
     
@@ -19,6 +58,9 @@ class ArraySeq : public Sequence<T> {
     ArraySeq(void) {
         array = NULL;
         size = 0;
+
+        begin.SetIndex(0);
+        begin.SetSeq(this);
     }
 
     /**
@@ -198,9 +240,8 @@ class ArraySeq : public Sequence<T> {
      * 
      */
     virtual void Print(void) {
-        int i;
-        for(i = 0; i < size; i++) {
-            cout << array[i] << " ";
+        for(auto i = Begin(); i != End(); i++) {
+            cout << *i << " ";
         }
         cout << endl;
     }
@@ -212,5 +253,24 @@ class ArraySeq : public Sequence<T> {
      */
     virtual int GetSize(void) {
         return size;
+    }
+
+    /**
+     * @brief Get an iterator on the start of the sequence
+     * 
+     */
+    virtual ArraySeqIter<T> Begin(void) {
+        return begin;        
+    }
+
+    /**
+     * @brief Returns an iterator referring to the past-the-end 
+     * element in the sequence container.
+     * 
+     */
+    virtual ArraySeqIter<T> End(void) {
+        end.SetSeq(this);
+        end.SetIndex(GetSize());
+        return end;
     }
 };

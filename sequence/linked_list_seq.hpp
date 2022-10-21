@@ -10,9 +10,46 @@ struct Node {
 };
 
 template <class T> 
+class LinkedListSeqIter {
+    
+    Node<T>* curr;
+
+    public: 
+
+    public:
+    LinkedListSeqIter() {}
+    ~LinkedListSeqIter() {}
+
+    void SetCurr(Node<T>* curr) {
+        this->curr = curr;
+    }
+
+    T operator*(void) {
+        return curr->item;
+    }
+    void operator++(void) {
+        curr = curr->next;
+    }
+    void operator++(int) {
+        curr = curr->next;
+    }
+    bool operator==(LinkedListSeqIter<T> B) {
+        return this->curr == B.curr;
+    }
+    bool operator!=(LinkedListSeqIter<T> B) {
+        return this->curr != B.curr;
+    }
+};
+
+
+
+template <class T> 
 class LinkedListSeq : public Sequence<T> {
     Node<T>* head;
     int size;
+
+    LinkedListSeqIter<T> begin;
+    LinkedListSeqIter<T> end;
 
     public:
     
@@ -254,10 +291,8 @@ class LinkedListSeq : public Sequence<T> {
      * 
      */
     virtual void Print(void) {
-        Node<T>* currNode = head;
-        while(currNode != NULL) {
-            cout << currNode->item << " ";
-            currNode = currNode->next;
+        for(auto i = Begin(); i != End(); i++) {
+            cout << *i << " ";
         }
         cout << endl;
     }
@@ -269,5 +304,24 @@ class LinkedListSeq : public Sequence<T> {
      */
     int GetSize(void) {
         return size;
+    }
+    
+    /**
+     * @brief Get an iterator on the start of the sequence
+     * 
+     */
+    virtual LinkedListSeqIter<T> Begin(void) {
+        begin.SetCurr(head);
+        return begin;        
+    }
+
+    /**
+     * @brief Returns an iterator referring to the past-the-end 
+     * element in the sequence container.
+     * 
+     */
+    virtual LinkedListSeqIter<T> End(void) {
+        end.SetCurr(NULL);
+        return end;
     }
 };

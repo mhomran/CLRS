@@ -4,12 +4,52 @@
 using namespace std;
 
 template <class T> 
+class DynamicArraySeqIter {
+    
+    Sequence<T>* seq;
+    int i;
+
+    public: 
+
+    public:
+    DynamicArraySeqIter() {}
+    ~DynamicArraySeqIter() {}
+
+    void SetSeq(Sequence<T>* seq) {
+        this->seq = seq;
+    }
+    void SetIndex(int i) {
+        this->i = i;
+    }
+
+    T operator*(void) {
+        return seq->GetAt(i);
+    }
+    void operator++(void) {
+        i++;
+    }
+    void operator++(int) {
+        i++;
+    }
+    bool operator==(DynamicArraySeqIter<T> B) {
+        return this->seq == B.seq && this->i == B.i;
+    }
+    bool operator!=(DynamicArraySeqIter<T> B) {
+        return this->seq != B.seq || this->i != B.i;
+    }
+};
+
+template <class T> 
 class DynamicArraySeq : public Sequence<T> {
     T* array;
     int size;
     int lower;
     int upper;
     int length;
+
+
+    DynamicArraySeqIter<T> begin;
+    DynamicArraySeqIter<T> end;
 
     void Resize(int n) {
         T* newArray;
@@ -42,6 +82,9 @@ class DynamicArraySeq : public Sequence<T> {
         array = NULL;
         size = 0;
         length = 0;
+
+        begin.SetSeq(this);
+        begin.SetIndex(0);
     }
 
     /**
@@ -174,14 +217,14 @@ class DynamicArraySeq : public Sequence<T> {
         }
     }
 
+
     /**
      * @brief print the sequence
      * 
      */
     virtual void Print(void) {
-        int i;
-        for(i = 0; i < size; i++) {
-            cout << array[i] << " ";
+        for(auto i = Begin(); i != End(); i++) {
+            cout << *i << " ";
         }
         cout << endl;
     }
@@ -193,5 +236,24 @@ class DynamicArraySeq : public Sequence<T> {
      */
     int GetSize(void) {
         return size;
+    }
+
+    /**
+     * @brief Get an iterator on the start of the sequence
+     * 
+     */
+    virtual DynamicArraySeqIter<T> Begin(void) {
+        return begin;        
+    }
+
+    /**
+     * @brief Returns an iterator referring to the past-the-end 
+     * element in the sequence container.
+     * 
+     */
+    virtual DynamicArraySeqIter<T> End(void) {
+        end.SetSeq(this);
+        end.SetIndex(GetSize());
+        return end;
     }
 };
