@@ -1,15 +1,17 @@
 #include <iostream>
-#include "direct_access_array_set.hpp"
+#include "hash_table_set.hpp"
+
 using namespace std;
 
-int main(void) {
-    DirectAccessArraySet<int>* A = new DirectAccessArraySet<int>(20);
+int main(void) { 
+    HashTableSet<int>* A;
     int i;
     Pair<int>* X;
     Pair<int> x;
     int Keys[] = { 9, 2, 3, 7, 5, 6, 8, 1, 0 };
     int Keys_size = sizeof(Keys)/sizeof(Keys[0]);
 
+    A = new HashTableSet<int>();
     X = new Pair<int>[Keys_size];
 
     for(i = 0; i < Keys_size; i++) {
@@ -64,5 +66,10 @@ int main(void) {
     A->Delete(3);
     A->Print();
 
+    cout << "Testing Delete(20):\n";
+    A->Delete(20);
+    A->Print();
+
     delete A;
+    delete[] X;
 }

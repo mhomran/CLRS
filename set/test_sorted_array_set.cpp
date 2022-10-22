@@ -5,18 +5,20 @@ using namespace std;
 int main(void) {
     SortedArraySet<int>* A = new SortedArraySet<int>();
     int i;
-    Pair<int> X[7];
+    Pair<int>* X;
     Pair<int> x;
     int Keys[] = { 9, 2, 3, 7, 5, 6, 8, 1, 0 };
     int Keys_size = sizeof(Keys)/sizeof(Keys[0]);
+
+    X = new Pair<int>[Keys_size];
 
     for(i = 0; i < Keys_size; i++) {
         X[i].SetKey(Keys[i]);
         X[i].SetItem(700);
     }
 
-    cout << "Testing Build(X, 7):\n";
-    A->Build(X, 7);
+    cout << "Testing Build(X, Keys_size):\n";
+    A->Build(X, Keys_size);
     A->Print();
     
     cout << "Testing Find(4):\n";
