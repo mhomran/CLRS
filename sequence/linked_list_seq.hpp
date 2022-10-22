@@ -17,7 +17,9 @@ class LinkedListSeqIter {
     public: 
 
     public:
-    LinkedListSeqIter() {}
+    LinkedListSeqIter() {
+        curr = NULL;
+    }
     ~LinkedListSeqIter() {}
 
     void SetCurr(Node<T>* curr) {
@@ -25,7 +27,8 @@ class LinkedListSeqIter {
     }
 
     T operator*(void) {
-        return curr->item;
+        if (NULL == curr) return T();
+        else return curr->item;
     }
     void operator++(void) {
         curr = curr->next;
