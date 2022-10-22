@@ -207,6 +207,16 @@ class DirectAccessArraySet {
         cout << endl;
     }
 
+
+    /**
+     * @brief return the size of the set
+     * 
+     * @param k 
+     */
+    virtual int GetSize(void) {
+        return u;
+    }
+
     /**
      * @brief Destroy the Set object
      * 

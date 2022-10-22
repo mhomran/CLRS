@@ -118,6 +118,13 @@ class Set {
     virtual Pair<T> FindPrev(int k) = 0;
 
     /**
+     * @brief return the size of the set
+     * 
+     * @param k 
+     */
+    virtual int GetSize(void) = 0;
+
+    /**
      * @brief Print the Set
      * 
      */

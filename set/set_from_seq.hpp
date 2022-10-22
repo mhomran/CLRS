@@ -29,6 +29,12 @@ class SetFromSeq {
 
     public:
     /**
+     * @brief Destroy the Set object
+     * 
+     */
+    virtual ~SetFromSeq() {};
+
+    /**
      * @brief given an iterable X, build set from items in X
      * 
      * @param X 
@@ -208,8 +214,28 @@ class SetFromSeq {
     }
 
     /**
-     * @brief Destroy the Set object
+     * @brief return the size of the set
+     * 
+     * @param k 
+     */
+    virtual int GetSize(void) {
+        return array.GetSize();
+    }
+
+    /**
+     * @brief Get an iterator on the start of the sequence
      * 
      */
-    virtual ~SetFromSeq() {};
+    auto Begin(void) {
+        return array.Begin();        
+    }
+
+    /**
+     * @brief Returns an iterator referring to the past-the-end 
+     * element in the sequence container.
+     * 
+     */
+    auto End(void) {
+        return array.End();        
+    }
 };

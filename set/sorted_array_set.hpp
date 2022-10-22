@@ -164,6 +164,15 @@ class SortedArraySet {
     }
 
     /**
+     * @brief return the size of the set
+     * 
+     * @param k 
+     */
+    virtual int GetSize(void) {
+        return array.GetSize();
+    }
+
+    /**
      * @brief Destroy the Set object
      * 
      */
