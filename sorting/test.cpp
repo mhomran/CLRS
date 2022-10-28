@@ -4,6 +4,7 @@
 #include "insertion_sort.hpp"
 #include "merge_sort.hpp"
 #include "direct_access_array_sort.hpp"
+#include "counting_sort.hpp"
 
 using namespace std;
 
@@ -15,7 +16,7 @@ void MyMemcpy(int Src[], ArraySeq<int>& Dst) {
 }
 
 int main(void) {
-    int A[] = { 9, 2, 3, 7, 5, 6, 8, 1, 0 };
+    int A[] = { 20, 13, 7, 15, 20, 6, 8, 1, 0 };
     int A_size = sizeof(A)/sizeof(A[0]);
 
     ArraySeq<int> Dst;
@@ -54,10 +55,19 @@ int main(void) {
     DirectAccessArraySort::Sort(Dst);
     Dst.Print();
 
+    cout << "The array initially (odd):\n";
+    MyMemcpy(A, Dst);
+    Dst.Print();
+
+    cout << "The counting sort:\n";
+    CountingSort::Sort(Dst);
+    Dst.Print();
+
+    cout << "---------------------------------------\n";
     Dst.DeleteFirst(); /* delete the first item -> makes it even */
 
     cout << "The sequence initially (even):\n";
-    MyMemcpy(A, Dst);
+    MyMemcpy(&A[1], Dst);
     Dst.Print();
 
     cout << "The Selection sort:\n";
@@ -65,7 +75,7 @@ int main(void) {
     Dst.Print();
 
     cout << "The sequence initially (even):\n";
-    MyMemcpy(A, Dst);
+    MyMemcpy(&A[1], Dst);
     Dst.Print();
 
     cout << "The Insertion sort:\n";
@@ -73,7 +83,7 @@ int main(void) {
     Dst.Print();
 
     cout << "The array initially (even):\n";
-    MyMemcpy(A, Dst);
+    MyMemcpy(&A[1], Dst);
     Dst.Print();
 
     cout << "The Merge sort:\n";
@@ -81,10 +91,18 @@ int main(void) {
     Dst.Print();
 
     cout << "The array initially (even):\n";
-    MyMemcpy(A, Dst);
+    MyMemcpy(&A[1], Dst);
     Dst.Print();
 
     cout << "The direct access array sort:\n";
     DirectAccessArraySort::Sort(Dst);
+    Dst.Print();
+
+    cout << "The array initially (even):\n";
+    MyMemcpy(&A[1], Dst);
+    Dst.Print();
+
+    cout << "The counting sort:\n";
+    CountingSort::Sort(Dst);
     Dst.Print();
 }
