@@ -12,7 +12,10 @@ class DynamicArraySeqIter {
     public: 
 
     public:
-    DynamicArraySeqIter() {}
+    DynamicArraySeqIter() {
+        seq = NULL;
+        i = -1;
+    }
     ~DynamicArraySeqIter() {}
 
     void SetSeq(Sequence<T>* seq) {
@@ -81,10 +84,9 @@ class DynamicArraySeq : public Sequence<T> {
     DynamicArraySeq(void) {
         array = NULL;
         size = 0;
+        lower = 0;
+        upper = 0;
         length = 0;
-
-        begin.SetSeq(this);
-        begin.SetIndex(0);
     }
 
     /**
@@ -92,7 +94,7 @@ class DynamicArraySeq : public Sequence<T> {
      * 
      */
     ~DynamicArraySeq(void) {
-        delete[] array;
+        if(NULL != array) delete[] array;
     }
 
     /**
@@ -243,6 +245,12 @@ class DynamicArraySeq : public Sequence<T> {
      * 
      */
     virtual DynamicArraySeqIter<T> Begin(void) {
+        if(size > 0) {
+            begin.SetIndex(0);
+        } else {
+            begin.SetIndex(-1);
+        }
+        begin.SetSeq(this);
         return begin;        
     }
 
@@ -252,8 +260,12 @@ class DynamicArraySeq : public Sequence<T> {
      * 
      */
     virtual DynamicArraySeqIter<T> End(void) {
+        if(size > 0) {
+            end.SetIndex(size);
+        } else {
+            end.SetIndex(-1);
+        }
         end.SetSeq(this);
-        end.SetIndex(GetSize());
         return end;
     }
 };

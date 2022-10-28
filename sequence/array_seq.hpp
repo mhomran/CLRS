@@ -58,9 +58,6 @@ class ArraySeq : public Sequence<T> {
     ArraySeq(void) {
         array = NULL;
         size = 0;
-
-        begin.SetIndex(0);
-        begin.SetSeq(this);
     }
 
     /**
@@ -260,6 +257,12 @@ class ArraySeq : public Sequence<T> {
      * 
      */
     virtual ArraySeqIter<T> Begin(void) {
+        if(size > 0) {
+            begin.SetIndex(0);
+        } else {
+            begin.SetIndex(-1);
+        }
+        begin.SetSeq(this);
         return begin;        
     }
 
@@ -269,8 +272,12 @@ class ArraySeq : public Sequence<T> {
      * 
      */
     virtual ArraySeqIter<T> End(void) {
+        if(size > 0) {
+            end.SetIndex(size);
+        } else {
+            end.SetIndex(-1);
+        }
         end.SetSeq(this);
-        end.SetIndex(GetSize());
         return end;
     }
 };
