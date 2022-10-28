@@ -4,32 +4,32 @@ class DirectAccessArraySort {
 
     public:
     
-    static void Sort(Sequence<int>& A) {
+    template <class T>
+    static void Sort(Sequence<T>& A) {
         int i, k;
-        int* daa;
+        T* daa;
         int u;
-        int A_i;
+        T A_i;
+        int A_i_key;
         
         if(A.GetSize() > 0) {
-            u = A.GetAt(0);
+            u = A.GetAt(0).GetKey();
             for(i = 1; i < A.GetSize(); i++) {
-                A_i = A.GetAt(i);
-                u = A_i > u ? A_i : u;
+                A_i_key = A.GetAt(i).GetKey();
+                u = A_i_key > u ? A_i_key : u;
             }
             u += 1;
 
-            daa = new int[u];
-            for(i = 0; i < u; i++) {
-                daa[i] = -1;
-            }
+            daa = new T[u];
 
             for(i = 0; i < A.GetSize(); i++) {
                 A_i = A.GetAt(i);
-                daa[A_i] = A_i;
+                A_i_key = A_i.GetKey();
+                daa[A_i_key] = A_i;
             }
 
             for(i = 0, k = 0; i < u; i++) {
-                if(-1 != daa[i]) {
+                if(-1 != daa[i].GetKey()) {
                     A.SetAt(k, daa[i]);
                     k++;
                 }

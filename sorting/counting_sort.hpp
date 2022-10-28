@@ -1,30 +1,32 @@
 #include "../sequence/sequence.hpp"
 #include "../sequence/linked_list_seq.hpp"
-#include "../sequence/dynamic_array_seq.hpp"
 
 class CountingSort {
 
     public:
-    
-    static void Sort(Sequence<int>& A) {
+
+    template <class T>
+    static void Sort(Sequence<T>& A) {
         int i, k;
-        DynamicArraySeq<int>* daa;
+        LinkedListSeq<T>* daa;
         int u;
-        int A_i;
+        T A_i;
+        int A_i_key;
         
-        if(A.GetSize() > 1) {
-            u = A.GetAt(0);
+        if(A.GetSize() > 0) {
+            u = A.GetAt(0).GetKey();
             for(i = 1; i < A.GetSize(); i++) {
-                A_i = A.GetAt(i);
-                u = A_i > u ? A_i : u;
+                A_i_key = A.GetAt(i).GetKey();
+                u = A_i_key > u ? A_i_key : u;
             }
             u += 1;
 
-            daa = new DynamicArraySeq<int>[u];
+            daa = new LinkedListSeq<T>[u];
 
             for(i = 0; i < A.GetSize(); i++) {
                 A_i = A.GetAt(i);
-                daa[A_i].InsertLast(A_i);
+                A_i_key = A_i.GetKey();
+                daa[A_i_key].InsertLast(A_i);
             }
 
             for(i = 0, k = 0; i < u; i++) {
@@ -35,8 +37,6 @@ class CountingSort {
             }
 
             delete[] daa;
-        } else {
-            /* DO NOTHING */
         }
     }
 };

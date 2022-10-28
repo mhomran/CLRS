@@ -5,10 +5,11 @@
 #include "merge_sort.hpp"
 #include "direct_access_array_sort.hpp"
 #include "counting_sort.hpp"
+#include "../set/set.hpp"
 
 using namespace std;
 
-void MyMemcpy(int Src[], ArraySeq<int>& Dst) {
+void MyMemcpy(Pair<char> Src[], ArraySeq<Pair<char>>& Dst) {
     int i;
     for(i = 0; i < Dst.GetSize(); i++) {
         Dst.SetAt(i, Src[i]);
@@ -16,10 +17,18 @@ void MyMemcpy(int Src[], ArraySeq<int>& Dst) {
 }
 
 int main(void) {
-    int A[] = { 20, 13, 7, 15, 20, 6, 8, 1, 0 };
-    int A_size = sizeof(A)/sizeof(A[0]);
+    int data[] = { 20, 13, 7, 15, 20, 6, 8, 1, 0 };
+    int A_size = sizeof(data)/sizeof(data[0]);
+    Pair<char>* A;
+    ArraySeq<Pair<char>> Dst;
+    int i;
 
-    ArraySeq<int> Dst;
+    A = new Pair<char>[A_size];
+
+    for(i = 0; i < A_size; i++) {
+        A[i].SetKey(data[i]);
+        A[i].SetItem(' ');
+    }
 
     Dst.Build(A, A_size);
 
@@ -51,7 +60,7 @@ int main(void) {
     MyMemcpy(A, Dst);
     Dst.Print();
 
-    cout << "The direct access array sort:\n";
+    cout << "The direct access array sort: (Keys are NOT unique)\n";
     DirectAccessArraySort::Sort(Dst);
     Dst.Print();
 
@@ -105,4 +114,6 @@ int main(void) {
     cout << "The counting sort:\n";
     CountingSort::Sort(Dst);
     Dst.Print();
+
+    delete A;
 }
