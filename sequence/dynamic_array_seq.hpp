@@ -16,6 +16,12 @@ class DynamicArraySeqIter {
         seq = NULL;
         i = -1;
     }
+
+    DynamicArraySeqIter(const DynamicArraySeqIter& A) {
+        seq = A.seq;
+        i = A.i;
+    }
+
     ~DynamicArraySeqIter() {}
 
     void SetSeq(Sequence<T>* seq) {
@@ -87,6 +93,33 @@ class DynamicArraySeq : public Sequence<T> {
         lower = 0;
         upper = 0;
         length = 0;
+    }
+    
+    void DeepCopy(const DynamicArraySeq& A) {
+        int i;
+
+        length = A.length;
+        if(length > 0) array = new T[length];
+        else array = NULL;
+        size = A.size;
+        upper = A.upper;
+        lower = A.lower;
+        for(i = 0; i < size; i++) {
+            array[i] = A.array[i];
+        }
+    }
+
+    /**
+     * @brief Construct a new Array Seq object
+     * 
+     */
+    DynamicArraySeq(const DynamicArraySeq& A) {
+        DeepCopy(A);
+    }
+
+    DynamicArraySeq& operator= (const DynamicArraySeq& A) {
+        DeepCopy(A);
+        return *this;
     }
 
     /**

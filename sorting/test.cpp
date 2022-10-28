@@ -5,6 +5,7 @@
 #include "merge_sort.hpp"
 #include "direct_access_array_sort.hpp"
 #include "counting_sort.hpp"
+#include "radix_sort.hpp"
 #include "../set/set.hpp"
 
 using namespace std;
@@ -72,6 +73,14 @@ int main(void) {
     CountingSort::Sort(Dst);
     Dst.Print();
 
+    cout << "The array initially (odd):\n";
+    MyMemcpy(A, Dst);
+    Dst.Print();
+
+    cout << "The radix sort:\n";
+    RadixSort::Sort(Dst);
+    Dst.Print();
+
     cout << "---------------------------------------\n";
     Dst.DeleteFirst(); /* delete the first item -> makes it even */
 
@@ -113,6 +122,14 @@ int main(void) {
 
     cout << "The counting sort:\n";
     CountingSort::Sort(Dst);
+    Dst.Print();
+
+    cout << "The array initially (even):\n";
+    MyMemcpy(&A[1], Dst);
+    Dst.Print();
+
+    cout << "The radix sort:\n";
+    RadixSort::Sort(Dst);
     Dst.Print();
 
     delete A;

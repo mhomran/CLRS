@@ -1,3 +1,4 @@
+#pragma once
 #include "../sequence/sequence.hpp"
 #include "../sequence/linked_list_seq.hpp"
 
