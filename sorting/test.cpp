@@ -3,6 +3,8 @@
 #include "selection_sort.hpp"
 #include "insertion_sort.hpp"
 #include "merge_sort.hpp"
+#include "direct_access_array_sort.hpp"
+
 using namespace std;
 
 void MyMemcpy(int Src[], ArraySeq<int>& Dst) {
@@ -44,6 +46,14 @@ int main(void) {
     MergeSort::Sort(Dst, 0, A_size-1);
     Dst.Print();
 
+    cout << "The array initially (odd):\n";
+    MyMemcpy(A, Dst);
+    Dst.Print();
+
+    cout << "The direct access array sort:\n";
+    DirectAccessArraySort::Sort(Dst);
+    Dst.Print();
+
     Dst.DeleteFirst(); /* delete the first item -> makes it even */
 
     cout << "The sequence initially (even):\n";
@@ -68,5 +78,13 @@ int main(void) {
 
     cout << "The Merge sort:\n";
     MergeSort::Sort(Dst, 0, Dst.GetSize()-1);
+    Dst.Print();
+
+    cout << "The array initially (even):\n";
+    MyMemcpy(A, Dst);
+    Dst.Print();
+
+    cout << "The direct access array sort:\n";
+    DirectAccessArraySort::Sort(Dst);
     Dst.Print();
 }
