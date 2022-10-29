@@ -132,5 +132,5 @@ int main(void) {
     RadixSort::Sort(Dst);
     Dst.Print();
 
-    delete A;
+    delete[] A;
 }

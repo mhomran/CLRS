@@ -134,8 +134,8 @@ class ArraySeq : public Sequence<T> {
         size -= 1; // update size
 
         newArray = new T[size];
-        for(i = 1; i < size; i++) {
-            newArray[i-1] = array[i];
+        for(i = 0; i < size; i++) {
+            newArray[i] = array[i+1];
         }
 
         delete[] array;
@@ -174,7 +174,7 @@ class ArraySeq : public Sequence<T> {
         size -= 1; // update size
 
         newArray = new T[size];
-        for(i = 0; i < size-1; i++) {
+        for(i = 0; i < size; i++) {
             newArray[i] = array[i];
         }
 

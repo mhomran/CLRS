@@ -202,7 +202,11 @@ class DirectAccessArraySet {
     virtual void Print(void) {
         int i;
         for(i = 0; i < u; i++) {
-            cout << array[i] << " ";
+            if(-1 != array[i].GetKey()) {
+                cout << array[i] << " ";
+            } else {
+                /* DO NOTHING */
+            }
         }
         cout << endl;
     }

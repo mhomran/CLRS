@@ -6,15 +6,30 @@ template <class T>
 class Pair {
     int key;
     T item;
+
+    
     public:
+    
     Pair() {
         key = -1;
     }
 
-    Pair(const Pair& s)
-    {
-        key = s.key;
-        item = s.item;
+    void DeepCopy(const Pair& A) {
+        key = A.key;
+        item = A.item;
+    }
+
+    /**
+     * @brief Construct a new Array Seq object
+     * 
+     */
+    Pair(const Pair& A) {
+        DeepCopy(A);
+    }
+
+    Pair& operator= (const Pair& A) {
+        DeepCopy(A);
+        return *this;
     }
 
     friend ostream & operator << (ostream &out, const Pair &c) {

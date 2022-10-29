@@ -8,6 +8,7 @@ int main(void) {
     int i;
     Pair<int>* X;
     Pair<int> x;
+    Pair<int> found;
     int Keys[] = { 9, 2, 3, 7, 5, 6, 8, 1, 0 };
     int Keys_size = sizeof(Keys)/sizeof(Keys[0]);
 
@@ -24,31 +25,76 @@ int main(void) {
     A->Print();
     
     cout << "Testing Find(4):\n";
-    cout << A->Find(4) << endl;
+    found = A->Find(4);
+    if(-1 == found.GetKey()) {
+        cout << "Key error: 4" << endl;
+    } else {
+        cout << found << endl;
+    }
 
     cout << "Testing Find(30):\n";
-    cout << A->Find(30) << endl;
+    found = A->Find(30);
+    if(-1 == found.GetKey()) {
+        cout << "Key error: 30" << endl;
+    } else {
+        cout << found << endl;
+    }
 
     cout << "Testing Find(3):\n";
-    cout << A->Find(3) << endl;
+    found = A->Find(3);
+    if(-1 == found.GetKey()) {
+        cout << "Key error: 3" << endl;
+    } else {
+        cout << found << endl;
+    }
 
     cout << "Testing FindNext(3):\n";
-    cout << A->FindNext(3) << endl;
+    found = A->FindNext(3);
+    if(-1 == found.GetKey()) {
+        cout << "Key error: 3" << endl;
+    } else {
+        cout << found << endl;
+    }
 
     cout << "Testing FindNext(30):\n";
-    cout << A->FindNext(30) << endl;
+    found = A->FindNext(30);
+    if(-1 == found.GetKey()) {
+        cout << "Key error: 30" << endl;
+    } else {
+        cout << found << endl;
+    }
 
     cout << "Testing FindPrev(3):\n";
-    cout << A->FindPrev(3) << endl;
+    found = A->FindPrev(3);
+    if(-1 == found.GetKey()) {
+        cout << "Key error: 3" << endl;
+    } else {
+        cout << found << endl;
+    }
 
     cout << "Testing FindPrev(30):\n";
-    cout << A->FindPrev(30) << endl;
+    found = A->FindPrev(30);
+    if(-1 == found.GetKey()) {
+        cout << "Key error: 30" << endl;
+    } else {
+        cout << found << endl;
+    }
  
     cout << "Testing FindMin():\n";
-    cout << A->FindMin() << endl;
+    found = A->FindMin();
+    if(-1 == found.GetKey()) {
+        cout << "No minimum" << endl;
+    } else {
+        cout << found << endl;
+    }
 
     cout << "Testing FindMax():\n";
-    cout << A->FindMax() << endl;
+    found = A->FindMax();
+    if(-1 == found.GetKey()) {
+        cout << "No maximum" << endl;
+    } else {
+        cout << found << endl;
+    }
 
     x.SetKey(3);
     x.SetItem(500);
@@ -64,10 +110,6 @@ int main(void) {
 
     cout << "Testing Delete(3):\n";
     A->Delete(3);
-    A->Print();
-
-    cout << "Testing Delete(20):\n";
-    A->Delete(20);
     A->Print();
 
     delete A;

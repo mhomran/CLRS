@@ -70,14 +70,16 @@ class HashTableSet : public Set<T> {
     int upper;
     int length;
 
-    int p = (1u << 31) - 1ul;
-    int a = rand() % (p - 1);
+    long p = (1u << 31) - 1ul;
+    long a = rand() % (p - 1);
     
     HashTableSetIter<T> begin;
     HashTableSetIter<T> end;
 
     int Hash(int k, int m) {
-        return (((a * k) % p) % m);
+        int h;
+        h = (((a * k) % p) % m);
+        return h;
     }
 
     void Resize(int n) {
@@ -186,7 +188,6 @@ class HashTableSet : public Set<T> {
         Pair<T> res;
         if(size < 0) return res;
 
-        int i;
         int minKey;
         auto resIt = End();
 
@@ -214,7 +215,6 @@ class HashTableSet : public Set<T> {
         Pair<T> res;
         if(size < 0) return res;
 
-        int i;
         int maxKey;
         auto resIt = End();
 
@@ -243,7 +243,6 @@ class HashTableSet : public Set<T> {
         Pair<T> res;
         if(size < 0) return res;
 
-        int i;
         int nextKeyDiff = INT_MAX;
         int diff;
         auto resIt = End();
@@ -274,7 +273,6 @@ class HashTableSet : public Set<T> {
         Pair<T> res;
         if(size < 0) return res;
 
-        int i;
         int nextKeyAbsDiff = INT_MAX;
         int diff;
         auto resIt = End();
