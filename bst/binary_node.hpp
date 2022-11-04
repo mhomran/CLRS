@@ -83,12 +83,14 @@ class BinaryNode {
     BinaryNode* right;
     BinaryNode* left;
     BinaryNode* parent;
+    int size;
 
     public:
     BinaryNode(void) {
         this->right = NULL;
         this->left = NULL;
         this->parent = NULL;
+        this->size = 1;
     }
 
     void DeepCopy(BinaryNode& A) {
@@ -96,6 +98,7 @@ class BinaryNode {
         A.right = right;
         A.parent = parent;
         A.item = item;
+        A.size = size;
     }
 
     BinaryNode(BinaryNode& A) {
@@ -122,6 +125,10 @@ class BinaryNode {
         this->item = item;
     }
 
+    void SetSize(int size) {
+        this->size = size;
+    }
+
     BinaryNode* GetRight(void) {
         return right;
     }
@@ -137,11 +144,15 @@ class BinaryNode {
     T GetItem(void) {
         return item;
     }
+    
+    int GetSize(void) {
+        return size;
+    }
 
     BinaryNode* SubtreeFirst(void) {
         BinaryNode* result;
         if(NULL != left) {
-            result = SubtreeFirst(left);
+            result = left->SubtreeFirst();
         } else {
             result = this;
         }
@@ -151,7 +162,7 @@ class BinaryNode {
     BinaryNode* SubtreeLast(void) {
         BinaryNode* result;
         if(NULL != right) {
-            result = SubtreeLast(left);
+            result = right->SubtreeLast();
         } else {
             result = this;
         }
@@ -190,6 +201,7 @@ class BinaryNode {
 
     void SubtreeInsertBefore(BinaryNode* tobeInserted) {
         BinaryNode* pred;
+        BinaryNode* curr;
 
         if(NULL == left) {
             left = tobeInserted;
@@ -199,10 +211,17 @@ class BinaryNode {
             pred->right = tobeInserted;
             tobeInserted->parent = pred;
         }
+
+        curr = tobeInserted->parent;
+        while(NULL != curr) {
+            curr->size += 1;
+            curr = curr->parent;
+        }
     }
 
     void SubtreeInsertAfter(BinaryNode* tobeInserted) {
         BinaryNode* succ;
+        BinaryNode* curr;
 
         if(NULL == right) {
             right = tobeInserted;
@@ -212,34 +231,77 @@ class BinaryNode {
             succ->left = tobeInserted;
             tobeInserted->parent = succ;
         }
+
+        curr = tobeInserted->parent;
+        while(NULL != curr) {
+            curr->size += 1;
+            curr = curr->parent;
+        }
     }
 
-    void SubtreeDelete(void) {
+    BinaryNode* SubtreeDelete(void) {
         BinaryNode* pred;
         BinaryNode* succ;
+        BinaryNode* tobeDeleted;
+        BinaryNode* curr;
         T temp;
+        
         if(NULL != left || NULL != right) {
             if(NULL != left) {
                 pred = left->SubtreeLast();
                 temp = pred->item;
                 pred->item = item;
                 item = temp;
-                pred->SubtreeDelete();
+                tobeDeleted = pred->SubtreeDelete();
             } else {
-                succ = left->SubtreeFirst();
+                succ = right->SubtreeFirst();
                 temp = succ->item;
                 succ->item = item;
                 item = temp;
-                succ->SubtreeDelete();
+                tobeDeleted = succ->SubtreeDelete();
             }
         } else {
+            tobeDeleted = this;
+
             if(NULL != parent) {
+                curr = tobeDeleted->parent;
+                while(NULL != curr) {
+                    curr->size -= 1;
+                    curr = curr->parent;
+                }
+
                 if(this == parent->left) parent->left = NULL;
                 else parent->right = NULL;
             } else {
                 /* DO NOTHING */
             }
         }
+        return tobeDeleted;
+    }
+
+    BinaryNode<T>* SubtreeAt(int i) {
+        int nl;
+        BinaryNode<T>* res = NULL;
+
+        if(i < size) {
+            if(NULL != left) {
+                nl = left->GetSize();
+            } else {
+                nl = 0;
+            }
+            
+            if(i < nl) {
+                res = left->SubtreeAt(i);
+            } else if(i > nl) {
+                res = right->SubtreeAt(i - nl - 1);
+            } else {
+                res = this;
+            }
+        } else {
+            /* DO NOTHING */
+        }
+
+        return res;
     }
 
     BinaryNodeIter<T> Begin(void) {
