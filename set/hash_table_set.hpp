@@ -87,24 +87,32 @@ class HashTableSet : public Set<T> {
         int h;
         int newLength;
 
-        if(this->lower < n && n < this->upper) {
-            /* DO NOTHING */
+        if (0 == n) {
+            delete[] array;
+            array = NULL;
+            lower = 0;
+            upper = 0;
+            length = 0;
         } else {
-            newLength = n * 2;
-            this->upper = newLength;
-            this->lower = newLength / 4;
-            newArray = new SetFromSeq<T, LinkedListSeq<Pair<T>>>[newLength];
-            if(array != NULL) {
-                for(auto i = Begin(); i != End(); i++) {
-                    h = Hash((*i).GetKey(), newLength);
-                    newArray[h].Insert(*i);
-                }
-                delete[] array;
-            } else {
+            if(this->lower < n && n < this->upper) {
                 /* DO NOTHING */
+            } else {
+                newLength = n * 2;
+                this->upper = newLength;
+                this->lower = newLength / 4;
+                newArray = new SetFromSeq<T, LinkedListSeq<Pair<T>>>[newLength];
+                if(array != NULL) {
+                    for(auto i = Begin(); i != End(); i++) {
+                        h = Hash((*i).GetKey(), newLength);
+                        newArray[h].Insert(*i);
+                    }
+                    delete[] array;
+                } else {
+                    /* DO NOTHING */
+                }
+                this->length = newLength;
+                array = newArray;
             }
-            this->length = newLength;
-            array = newArray;
         }
     }
 
@@ -175,7 +183,7 @@ class HashTableSet : public Set<T> {
     virtual void Delete(int k) {
         int h;
         this->Resize(size-1);
-        size += 1;
+        size -= 1;
         h = Hash(k, length);
         array[h].Delete(k);
     }

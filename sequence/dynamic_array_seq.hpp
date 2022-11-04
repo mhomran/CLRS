@@ -63,22 +63,30 @@ class DynamicArraySeq : public Sequence<T> {
     void Resize(int n) {
         T* newArray;
         int i;
-        if(this->lower < n && n < this->upper) {
-            /* DO NOTHING */
+        if(0 == n) {
+            delete[] array;
+            array = NULL;
+            lower = 0;
+            upper = 0;
+            length = 0;
         } else {
-            this->length = n * 2;
-            this->upper = this->length;
-            this->lower = this->length / 4;
-            newArray = new T[this->length];
-            if(array != NULL) {
-                for(i = 0; i < size; i++) {
-                    newArray[i] = array[i];
-                }
-                delete[] array;
-            } else {
+            if(this->lower < n && n < this->upper) {
                 /* DO NOTHING */
+            } else {
+                this->length = n * 2;
+                this->upper = this->length;
+                this->lower = this->length / 4;
+                newArray = new T[this->length];
+                if(array != NULL) {
+                    for(i = 0; i < size; i++) {
+                        newArray[i] = array[i];
+                    }
+                    delete[] array;
+                } else {
+                    /* DO NOTHING */
+                }
+                array = newArray;
             }
-            array = newArray;
         }
     }
     public:
