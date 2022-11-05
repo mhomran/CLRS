@@ -1,7 +1,9 @@
 SEQ_DIR=../sequence
+BST_DIR=../bst
 SORT_DIR=../sorting
 
-all: hash_table_set.exe array_set.exe sorted_array_set.exe direct_access_array_set.exe
+all: hash_table_set.exe array_set.exe sorted_array_set.exe \
+direct_access_array_set.exe binary_tree_set.exe
 
 array_set.exe: set.hpp set_from_seq.hpp test_array_set.cpp \
 ${SEQ_DIR}/sequence.hpp ${SEQ_DIR}/array_seq.hpp
@@ -20,6 +22,12 @@ set_from_seq.hpp \
 ${SEQ_DIR}/sequence.hpp ${SEQ_DIR}/linked_list_seq.hpp \
 
 	g++ -g -Wall test_hash_table_set.cpp -o hash_table_set.exe
+
+binary_tree_set.exe: set.hpp binary_tree_set.hpp test_binary_tree_set.cpp \
+set_from_seq.hpp \
+${BST_DIR}/binary_tree.hpp ${BST_DIR}/bst_node.hpp \
+
+	g++ -g -Wall test_binary_tree_set.cpp -o binary_tree_set.exe
 
 clean:
 	rm *.exe

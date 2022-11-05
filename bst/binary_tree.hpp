@@ -5,7 +5,7 @@
 
 template <class NodeType, class T>
 class BinaryTree {
-    NodeType* root;
+    
 
     NodeType* BuildSubtree(Sequence<T>& X, int i, int j) {
         int c;
@@ -53,6 +53,9 @@ class BinaryTree {
         return root;
     }
 
+    protected:
+    NodeType* root;
+
     public:
     BinaryTree() {
         root = NULL;
@@ -60,7 +63,7 @@ class BinaryTree {
 
     ~BinaryTree() {
         while(NULL != root) {
-            NodeType* tobeDeleted = root->SubtreeDelete();
+            NodeType* tobeDeleted = ((NodeType*)root->SubtreeDelete());
             if(tobeDeleted == root) root = NULL;
             delete tobeDeleted;
         } 

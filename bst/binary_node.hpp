@@ -79,6 +79,8 @@ class BinaryNodeIter {
 
 template <class T>
 class BinaryNode {
+    
+    protected:
     T item;
     BinaryNode* right;
     BinaryNode* left;
