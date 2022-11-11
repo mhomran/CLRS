@@ -1,8 +1,8 @@
 #pragma once
-#include "binary_node.hpp"
+#include "seq_node.hpp"
 
 template <class T>
-class BstNode : public BinaryNode<T> {
+class BstNode : public SeqNode<T> {
     
     public:
     BstNode<T>* SubtreeFind(int k) {
