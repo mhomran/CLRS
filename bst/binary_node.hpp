@@ -85,7 +85,6 @@ class BinaryNode {
     BinaryNode* right;
     BinaryNode* left;
     BinaryNode* parent;
-    int size;
     int height;
 
     int Height(BinaryNode* node) {
@@ -138,6 +137,7 @@ class BinaryNode {
         E = D->right;
 
         Swap(B, D);
+        Swap(B->item, D->item);
 
         D->SetLeft(B);
         D->SetRight(E);
@@ -247,7 +247,7 @@ class BinaryNode {
         return height;
     }
     
-    volatile void SubtreeUpdate(void) {
+    virtual void SubtreeUpdate(void) {
         height = 1 + max(Height(left), Height(right));
     }
 
@@ -356,31 +356,6 @@ class BinaryNode {
             }
         }
         return tobeDeleted;
-    }
-
-    BinaryNode<T>* SubtreeAt(int i) {
-        int nl;
-        BinaryNode<T>* res = NULL;
-
-        if(i < size) {
-            if(NULL != left) {
-                nl = left->GetSize();
-            } else {
-                nl = 0;
-            }
-            
-            if(i < nl) {
-                res = left->SubtreeAt(i);
-            } else if(i > nl) {
-                res = right->SubtreeAt(i - nl - 1);
-            } else {
-                res = this;
-            }
-        } else {
-            /* DO NOTHING */
-        }
-
-        return res;
     }
 
     BinaryNodeIter<T> Begin(void) {

@@ -4,11 +4,12 @@
 #include <cstddef>
 #include "sequence.hpp"
 #include "../bst/binary_tree.hpp"
+#include "../bst/seq_node.hpp"
 using namespace std;
 
 template <class T> 
 class BinaryTreeSeq : public Sequence<T> {
-    BinaryTree<BinaryNode<T>, T> binTree;
+    BinaryTree<SeqNode<T>, T> binTree;
     
     public:
     
@@ -42,7 +43,7 @@ class BinaryTreeSeq : public Sequence<T> {
      * @return T 
      */
     virtual T GetAt(int i){
-        BinaryNode<T>* res;
+        SeqNode<T>* res;
         T item;
         res = binTree.GetRoot()->SubtreeAt(i);
         if(NULL != res) {
@@ -60,7 +61,7 @@ class BinaryTreeSeq : public Sequence<T> {
      * @return int 
      */
     virtual void SetAt(int i, T x) {
-        BinaryNode<T>* res;
+        SeqNode<T>* res;
         res = binTree.GetRoot()->SubtreeAt(i);
         if(NULL != res) {
             res->SetItem(x);
@@ -75,14 +76,14 @@ class BinaryTreeSeq : public Sequence<T> {
      * @param x 
      */
     virtual void InsertFirst(T x) {
-        BinaryNode<T>* first;
-        BinaryNode<T>* tobeInserted;
+        SeqNode<T>* first;
+        SeqNode<T>* tobeInserted;
         
-        tobeInserted = new BinaryNode<T>();
+        tobeInserted = new SeqNode<T>();
         tobeInserted->SetItem(x);
 
         if(NULL != binTree.GetRoot()) {
-            first = binTree.GetRoot()->SubtreeFirst();
+            first = (SeqNode<T>*)binTree.GetRoot()->SubtreeFirst();
             first->SubtreeInsertBefore(tobeInserted);
         } else {
             binTree.SetRoot(tobeInserted);
@@ -94,11 +95,11 @@ class BinaryTreeSeq : public Sequence<T> {
      * 
      */
     virtual void DeleteFirst(void) {
-        BinaryNode<T>* first;
+        SeqNode<T>* first;
         
         if(NULL != binTree.GetRoot()) {
-            first = binTree.GetRoot()->SubtreeFirst();
-            first = first->SubtreeDelete();
+            first = (SeqNode<T>*)binTree.GetRoot()->SubtreeFirst();
+            first = (SeqNode<T>*)first->SubtreeDelete();
             delete first;
         } else {
             delete binTree.GetRoot();
@@ -112,14 +113,14 @@ class BinaryTreeSeq : public Sequence<T> {
      * @param x 
      */
     virtual void InsertLast(T x) {
-        BinaryNode<T>* last;
-        BinaryNode<T>* tobeInserted;
+        SeqNode<T>* last;
+        SeqNode<T>* tobeInserted;
         
-        tobeInserted = new BinaryNode<T>();
+        tobeInserted = new SeqNode<T>();
         tobeInserted->SetItem(x);
 
         if(NULL != binTree.GetRoot()) {
-            last = binTree.GetRoot()->SubtreeLast();
+            last = (SeqNode<T>*)binTree.GetRoot()->SubtreeLast();
             last->SubtreeInsertAfter(tobeInserted);
         } else {
             binTree.SetRoot(tobeInserted);
@@ -131,11 +132,11 @@ class BinaryTreeSeq : public Sequence<T> {
      * 
      */
     virtual void DeleteLast(void) {
-        BinaryNode<T>* last;
+        SeqNode<T>* last;
         
         if(NULL != binTree.GetRoot()) {
-            last = binTree.GetRoot()->SubtreeLast();
-            last = last->SubtreeDelete();
+            last = (SeqNode<T>*)binTree.GetRoot()->SubtreeLast();
+            last = (SeqNode<T>*)last->SubtreeDelete();
             delete last;
         } else {
             delete binTree.GetRoot();
@@ -149,12 +150,12 @@ class BinaryTreeSeq : public Sequence<T> {
      * @param x 
      */
     virtual void InsertAt(int i, T x) {
-        BinaryNode<T>* res;
-        BinaryNode<T>* tobeInserted;
+        SeqNode<T>* res;
+        SeqNode<T>* tobeInserted;
         
         
         if(0 < i && i < GetSize()) {
-            tobeInserted = new BinaryNode<T>();
+            tobeInserted = new SeqNode<T>();
             tobeInserted->SetItem(x);
             
             res = binTree.GetRoot()->SubtreeAt(i-1);
@@ -172,11 +173,11 @@ class BinaryTreeSeq : public Sequence<T> {
      * @param x 
      */
     virtual void DeleteAt(int i) {
-        BinaryNode<T>* tobeDeleted;
+        SeqNode<T>* tobeDeleted;
         
         if(0 < i && i < GetSize()) {
-            tobeDeleted = binTree.GetRoot()->SubtreeAt(i);
-            tobeDeleted = tobeDeleted->SubtreeDelete();
+            tobeDeleted = (SeqNode<T>*)binTree.GetRoot()->SubtreeAt(i);
+            tobeDeleted = (SeqNode<T>*)tobeDeleted->SubtreeDelete();
             delete tobeDeleted;
         } else if (0 == i) {
             DeleteFirst();

@@ -21,7 +21,7 @@ int main() {
     cout << "Testing GetAt(5):\n";
     cout << A->GetAt(5) << endl;
 
-    cout << "testing InsertFirst and Print:\n";
+    cout << "testing InsertFirst(20) and Print:\n";
     A->InsertFirst(20);
     A->Print();
 

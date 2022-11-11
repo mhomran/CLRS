@@ -39,7 +39,6 @@ class BinaryTree {
 
         NodeType* root = new NodeType();
         root->SetItem(X[c]);
-        root->SetSize(j - i + 1);
 
         if(i < c) {
             NodeType* left = BuildSubtree(X, i, c-1);
@@ -138,12 +137,12 @@ class BinaryTree {
 
                 queue.DeleteFirst();
                 if (NULL != tobePrinted->GetLeft()) {
-                    queue.InsertLast(tobePrinted->GetLeft());
+                    queue.InsertLast((NodeType*)tobePrinted->GetLeft());
                 } else {
                     /* DO NOTHING */
                 }
                 if (NULL != tobePrinted->GetRight()) {
-                    queue.InsertLast(tobePrinted->GetRight());
+                    queue.InsertLast((NodeType*)tobePrinted->GetRight());
                 } else {
                     /* DO NOTHING */
                 }
