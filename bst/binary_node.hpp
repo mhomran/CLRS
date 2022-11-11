@@ -86,21 +86,117 @@ class BinaryNode {
     BinaryNode* left;
     BinaryNode* parent;
     int size;
+    int height;
+
+    int Height(BinaryNode* node) {
+        if (NULL != node) return node->height;
+        else return -1;
+    }
+
+    int GetSkew(void) {
+        return Height(right) - Height(left);
+    }
+
+    template <class D>
+    static void Swap(D&x, D&y) {
+        D temp = x;
+        x = y;
+        y = temp;
+    }
+
+    void SubtreeRotateRight(void) {
+        BinaryNode *D, *B, *E, *A, *C;
+
+        D = this;
+        B = D->left;
+        E = D->right;
+        A = B->left;
+        C = B->right;
+
+        Swap(B, D);
+        Swap(B->item, D->item);
+
+        D->SetLeft(C);
+        D->SetRight(E);
+        B->SetLeft(A);
+        B->SetRight(D);
+
+        if(NULL != A) A->SetParent(B);
+        if(NULL != E) E->SetParent(D);
+
+        B->SubtreeUpdate();
+        D->SubtreeUpdate();
+    }
+    
+    void SubtreeRotateLeft(void) {
+        BinaryNode *D, *B, *E, *A, *C;
+
+        B = this;
+        A = B->left;
+        D = B->right;
+        C = D->left;
+        E = D->right;
+
+        Swap(B, D);
+
+        D->SetLeft(B);
+        D->SetRight(E);
+        B->SetLeft(A);
+        B->SetRight(C);
+
+        if(NULL != A) A->SetParent(B);
+        if(NULL != E) E->SetParent(D);
+
+        B->SubtreeUpdate();
+        D->SubtreeUpdate();
+    }
+
+    void Rebalance(void) {
+        if(GetSkew() == 2) {
+            if (right->GetSkew() < 0) {
+                right->SubtreeRotateRight();
+            } else {
+                /* DO NOTHING */
+            }
+            SubtreeRotateLeft();
+        } else if(GetSkew() == -2) {
+            if (left->GetSkew() > 0) {
+                left->SubtreeRotateLeft();
+            } else {
+                /* DO NOTHING */
+            }
+            SubtreeRotateRight();
+        }
+    }
+
+    void Maintain(void) {
+        Rebalance();
+        SubtreeUpdate();
+        if(NULL != parent) parent->Maintain();
+    }
 
     public:
     BinaryNode(void) {
         this->right = NULL;
         this->left = NULL;
         this->parent = NULL;
-        this->size = 1;
+        SubtreeUpdate();
     }
 
-    void DeepCopy(BinaryNode& A) {
+    virtual void DeepCopy(BinaryNode& A) {
         A.left = left;
         A.right = right;
         A.parent = parent;
         A.item = item;
-        A.size = size;
+        A.height = height;
+    }
+    
+    virtual void DeepCopy(BinaryNode* A) {
+        if (NULL != A) {
+            DeepCopy(*A);
+        } else {
+            /* DO NOTHING */
+        }
     }
 
     BinaryNode(BinaryNode& A) {
@@ -127,8 +223,8 @@ class BinaryNode {
         this->item = item;
     }
 
-    void SetSize(int size) {
-        this->size = size;
+    void SetHeight(int height) {
+        this->height = height;
     }
 
     BinaryNode* GetRight(void) {
@@ -147,8 +243,12 @@ class BinaryNode {
         return item;
     }
     
-    int GetSize(void) {
-        return size;
+    int GetHeight(void) {
+        return height;
+    }
+    
+    volatile void SubtreeUpdate(void) {
+        height = 1 + max(Height(left), Height(right));
     }
 
     BinaryNode* SubtreeFirst(void) {
@@ -203,7 +303,6 @@ class BinaryNode {
 
     void SubtreeInsertBefore(BinaryNode* tobeInserted) {
         BinaryNode* pred;
-        BinaryNode* curr;
 
         if(NULL == left) {
             left = tobeInserted;
@@ -214,16 +313,11 @@ class BinaryNode {
             tobeInserted->parent = pred;
         }
 
-        curr = tobeInserted->parent;
-        while(NULL != curr) {
-            curr->size += 1;
-            curr = curr->parent;
-        }
+        tobeInserted->Maintain();
     }
 
     void SubtreeInsertAfter(BinaryNode* tobeInserted) {
         BinaryNode* succ;
-        BinaryNode* curr;
 
         if(NULL == right) {
             right = tobeInserted;
@@ -234,46 +328,29 @@ class BinaryNode {
             tobeInserted->parent = succ;
         }
 
-        curr = tobeInserted->parent;
-        while(NULL != curr) {
-            curr->size += 1;
-            curr = curr->parent;
-        }
+        tobeInserted->Maintain();
     }
 
     BinaryNode* SubtreeDelete(void) {
-        BinaryNode* pred;
-        BinaryNode* succ;
-        BinaryNode* tobeDeleted;
-        BinaryNode* curr;
-        T temp;
+        BinaryNode *pred, *succ, *tobeDeleted;
         
         if(NULL != left || NULL != right) {
             if(NULL != left) {
                 pred = left->SubtreeLast();
-                temp = pred->item;
-                pred->item = item;
-                item = temp;
+                Swap(pred->item, this->item);
                 tobeDeleted = pred->SubtreeDelete();
             } else {
                 succ = right->SubtreeFirst();
-                temp = succ->item;
-                succ->item = item;
-                item = temp;
+                Swap(succ->item, this->item);
                 tobeDeleted = succ->SubtreeDelete();
             }
         } else {
             tobeDeleted = this;
-
             if(NULL != parent) {
-                curr = tobeDeleted->parent;
-                while(NULL != curr) {
-                    curr->size -= 1;
-                    curr = curr->parent;
-                }
-
                 if(this == parent->left) parent->left = NULL;
                 else parent->right = NULL;
+
+                tobeDeleted->Maintain();
             } else {
                 /* DO NOTHING */
             }
@@ -315,4 +392,6 @@ class BinaryNode {
         BinaryNodeIter<T> end(NULL);
         return end;
     }
+
+    virtual ~BinaryNode() {}
  };

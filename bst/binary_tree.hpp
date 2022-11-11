@@ -2,6 +2,7 @@
 
 #include "binary_node.hpp"
 #include "../sequence/sequence.hpp"
+#include "../sequence/dynamic_array_seq.hpp"
 
 template <class NodeType, class T>
 class BinaryTree {
@@ -14,7 +15,6 @@ class BinaryTree {
 
         NodeType* root = new NodeType();
         root->SetItem(X.GetAt(c));
-        root->SetSize(j - i + 1);
 
         if(i < c) {
             NodeType* left = BuildSubtree(X, i, c-1);
@@ -26,6 +26,8 @@ class BinaryTree {
             root->SetRight(right);
             right->SetParent(root);
         }
+
+        root->SubtreeUpdate();
 
         return root;
     }
@@ -49,6 +51,8 @@ class BinaryTree {
             root->SetRight(right);
             right->SetParent(root);
         }
+
+        root->SubtreeUpdate();
 
         return root;
     }
@@ -118,5 +122,42 @@ class BinaryTree {
             cout << *i << " ";
         }
         cout << endl;
+    }
+
+    void PrintLevels() {
+        DynamicArraySeq<NodeType*> queue;
+        NodeType* tobePrinted;
+        int levelNumberOfNodes;
+        if(NULL != root) {
+            queue.InsertFirst(root);
+            levelNumberOfNodes = 1;
+            while(levelNumberOfNodes > 0) {
+                tobePrinted = queue.GetAt(0);
+
+                cout << tobePrinted->GetItem() << " ";
+
+                queue.DeleteFirst();
+                if (NULL != tobePrinted->GetLeft()) {
+                    queue.InsertLast(tobePrinted->GetLeft());
+                } else {
+                    /* DO NOTHING */
+                }
+                if (NULL != tobePrinted->GetRight()) {
+                    queue.InsertLast(tobePrinted->GetRight());
+                } else {
+                    /* DO NOTHING */
+                }
+
+                levelNumberOfNodes --;
+                if(0 == levelNumberOfNodes) {
+                    levelNumberOfNodes = queue.GetSize();
+                    cout << endl;
+                } else {
+                    /* DO NOTHING */
+                }
+            }
+        } else {
+            /* DO NOTHING */
+        }
     }
 };
