@@ -2,11 +2,12 @@
 #include "../sequence/array_seq.hpp"
 #include "selection_sort.hpp"
 #include "insertion_sort.hpp"
+#include "../set/set.hpp"
 #include "merge_sort.hpp"
 #include "direct_access_array_sort.hpp"
 #include "counting_sort.hpp"
 #include "radix_sort.hpp"
-#include "../set/set.hpp"
+#include "priority_queue_sort.hpp"
 
 using namespace std;
 
@@ -80,6 +81,15 @@ int main(void) {
     cout << "The radix sort:\n";
     RadixSort::Sort(Dst);
     Dst.Print();
+    
+    cout << "The array initially (odd):\n";
+    MyMemcpy(A, Dst);
+    Dst.Print();
+
+    cout << "The priority queue sort with Array implementation :\n";
+    cout << "equivalent to selection sort:\n";
+    PQSortedArray<Pair<char>>::Sort(Dst);
+    Dst.Print();
 
     cout << "---------------------------------------\n";
     Dst.DeleteFirst(); /* delete the first item -> makes it even */
@@ -130,6 +140,15 @@ int main(void) {
 
     cout << "The radix sort:\n";
     RadixSort::Sort(Dst);
+    Dst.Print();
+
+    cout << "The array initially (even):\n";
+    MyMemcpy(&A[1], Dst);
+    Dst.Print();
+
+    cout << "The priority queue sort with Array implementation :\n";
+    cout << "equivalent to selection sort:\n";
+    PQSortedArray<Pair<char>>::Sort(Dst);
     Dst.Print();
 
     delete[] A;
