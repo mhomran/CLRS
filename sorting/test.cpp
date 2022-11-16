@@ -88,6 +88,15 @@ int main(void) {
 
     cout << "The priority queue sort with Array implementation :\n";
     cout << "equivalent to selection sort:\n";
+    PQArray<Pair<char>>::Sort(Dst);
+    Dst.Print();
+    
+    cout << "The array initially (odd):\n";
+    MyMemcpy(A, Dst);
+    Dst.Print();
+
+    cout << "The priority queue sort with Sorted Array implementation :\n";
+    cout << "equivalent to insertion sort:\n";
     PQSortedArray<Pair<char>>::Sort(Dst);
     Dst.Print();
 
@@ -148,6 +157,15 @@ int main(void) {
 
     cout << "The priority queue sort with Array implementation :\n";
     cout << "equivalent to selection sort:\n";
+    PQArray<Pair<char>>::Sort(Dst);
+    Dst.Print();
+    
+    cout << "The array initially (even):\n";
+    MyMemcpy(&A[1], Dst);
+    Dst.Print();
+
+    cout << "The priority queue sort with Sorted Array implementation :\n";
+    cout << "equivalent to insertion sort:\n";
     PQSortedArray<Pair<char>>::Sort(Dst);
     Dst.Print();
 

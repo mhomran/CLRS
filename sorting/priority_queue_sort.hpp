@@ -45,7 +45,7 @@ class PriorityQueue
 };
 
 template <class T>
-class PQSortedArray : public PriorityQueue<T> {
+class PQArray : public PriorityQueue<T> {
 
     protected:
 
@@ -67,6 +67,35 @@ class PQSortedArray : public PriorityQueue<T> {
         this->A.SetAt(m, temp);
 
         PriorityQueue<T>::DeleteMax();
+    }
+    
+    public:
+    PQArray(Sequence<T>& A)
+    : PriorityQueue<T>(A) {
+    }
+
+    static void Sort(Sequence<T>& A) {
+        PQArray pq(A);
+        PriorityQueue<T>::Sort(pq, A);
+    }
+};
+
+template <class T>
+class PQSortedArray : public PriorityQueue<T> {
+
+    protected:
+
+    void Insert() {
+        T tobeInserted = this->A.GetAt(this->n);
+        int i;
+        i = this->n - 1;
+        while(i >= 0 && this->A.GetAt(i) > tobeInserted) {
+            this->A.SetAt(i+1, this->A.GetAt(i));
+            i--;
+        }
+        this->A.SetAt(i+1, tobeInserted);
+
+        PriorityQueue<T>::Insert();
     }
     
     public:
