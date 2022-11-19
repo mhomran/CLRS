@@ -310,4 +310,8 @@ class DynamicArraySeq : public Sequence<T> {
         end.SetSeq(this);
         return end;
     }
+
+    bool isEmpty(void) {
+        return this->GetSize() == 0;
+    }
 };

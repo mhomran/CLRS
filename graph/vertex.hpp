@@ -19,10 +19,18 @@ template <class T>
 class Vertex {
     T item;
     int idx;
-    
+
+    bool visited;
+    int shortestDistance;
+    Vertex<T>* parent;
+
     HashTableSet<Vertex<T>*> adjList;
 
     public:
+    Vertex() {
+        parent = NULL;
+    }
+
     void SetItem(T item) {
         this->item = item;
     }
@@ -37,6 +45,30 @@ class Vertex {
 
     int GetIdx(void) {
         return this->idx;
+    }
+    
+    void SetVisited(bool visited) {
+        this->visited = visited;
+    }
+
+    bool IsVisited(void) {
+        return this->visited;
+    }
+
+    void SetParent(Vertex<T>* parent) {
+        this->parent = parent;
+    }
+
+    Vertex<T>* GetParent(void) {
+        return this->parent;
+    }
+
+    void SetShortestDistance(int shortestDistance) {
+        this->shortestDistance = shortestDistance;
+    }
+
+    int SetShortestDistance(void) {
+        return this->SetShortestDistance;
     }
 
     void AddEdgeTo(Vertex<T>* tobeInsertedVertex) {
