@@ -1,3 +1,5 @@
+#pragma once
+
 #include "../sequence/sequence.hpp"
 
 class MergeSort {

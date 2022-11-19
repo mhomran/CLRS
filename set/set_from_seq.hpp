@@ -1,3 +1,4 @@
+#pragma once
 #include <climits>
 #include "set.hpp"
 #include "../sequence/array_seq.hpp"

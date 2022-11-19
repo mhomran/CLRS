@@ -21,6 +21,9 @@ class LinkedListSeqIter {
     LinkedListSeqIter() {
         curr = NULL;
     }
+    LinkedListSeqIter(const LinkedListSeqIter& other) {
+        this->curr = other.curr;
+    }
     ~LinkedListSeqIter() {}
 
     void SetCurr(Node<T>* curr) {

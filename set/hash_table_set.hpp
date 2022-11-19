@@ -1,3 +1,4 @@
+#pragma once 
 #include <cstdlib>
 #include "../sequence/linked_list_seq.hpp"
 #include "set_from_seq.hpp"
@@ -16,6 +17,12 @@ class HashTableSetIter {
     HashTableSet<T>* hashTableSet;
     
     public:
+    HashTableSetIter(const HashTableSetIter<T>& other) {
+        this->i = other.i;
+        this->j = other.j;
+        this->hashTableSet = other.hashTableSet;
+    }
+
     HashTableSetIter() {
         hashTableSet = NULL;
         i = -1;
