@@ -6,8 +6,9 @@ constexpr size_t SizeOfArray(T(&Array)[Size]) { return Size; }
 int main() {
     size_t i;
     Graph<char> graph;
-    Vertex<char> vertices[4];
+    Vertex<char> vertices[5];
     DynamicArraySeq<Vertex<char>*> shortestPath;
+    DynamicArraySeq<DynamicArraySeq<Vertex<char>*>> connectedComponents;
 
     for(i = 0; i < SizeOfArray(vertices); i++) {
         vertices[i].SetIdx(i);
@@ -48,8 +49,12 @@ int main() {
     shortestPath = graph.UnweightedShortestPath(&vertices[0], &vertices[3]);
 
     for(i = 0; i < SizeOfArray(vertices); i++) {
-        cout << vertices[i] << " has a parent: ";
-        cout << *vertices[i].GetParent() << endl;
+        if(NULL != vertices[i].GetParent()) {
+            cout << vertices[i] << " has a parent: ";
+            cout << *vertices[i].GetParent() << endl;
+        } else {
+            cout << vertices[i] << " doesn't have a parent" << endl;
+        }
     }
 
     cout << "The shortest path is:\n";
@@ -57,4 +62,19 @@ int main() {
         cout << **vPtr << " ";
     }
     cout << endl;
+
+    connectedComponents = graph.GetConnectedComponents();
+
+    cout << "The connected components are:\n";
+    
+    i = 0;
+    for(auto cc = connectedComponents.Begin(); cc != connectedComponents.End(); cc++, i++) {
+        cout << "component #" << i << ":\n";
+
+        auto ccTemp = *cc;
+        /* Watch out as you could create different temporary sequences with *cc */
+        for(auto vIter = ccTemp.Begin(); vIter != (ccTemp.End()); vIter++) {
+            cout << **vIter << endl;
+        }
+    }
 }

@@ -314,4 +314,14 @@ class DynamicArraySeq : public Sequence<T> {
     bool isEmpty(void) {
         return this->GetSize() == 0;
     }
+
+    friend ostream & operator << (ostream &out, const DynamicArraySeq &c) {
+        int i;
+
+        for(i = 0; i < c.size; i++) {
+            cout << c.array[i] << endl;
+        }    
+
+        return out;
+    }
 };

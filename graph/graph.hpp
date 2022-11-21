@@ -47,6 +47,20 @@ class Graph {
         }
     }
 
+    void 
+    DepthFirstSearch(Vertex<T>* src, 
+    DynamicArraySeq<Vertex<T>*>& connectedComponent) {
+        for(auto adjListIter = src->Begin(); adjListIter != src->End(); adjListIter++) {
+            if(! (*adjListIter)->IsVisited()) {
+                (*adjListIter)->SetParent(src);
+                (*adjListIter)->SetVisited(true);
+                DepthFirstSearch((*adjListIter), connectedComponent);
+            }
+        }
+        
+        connectedComponent.InsertLast(src);
+    }
+
     void MakeVerticesNotVisited(void) {
         for(auto vIter = Begin(); vIter != End(); vIter++) {
             (*vIter)->SetVisited(false);
@@ -90,5 +104,24 @@ class Graph {
         }
 
         return path;
+    }
+
+    DynamicArraySeq<DynamicArraySeq<Vertex<T>*>> 
+    GetConnectedComponents(void) {
+        DynamicArraySeq<DynamicArraySeq<Vertex<T>*>> res;
+        
+        MakeVerticesNotVisited();
+        
+        for(auto vIter = Begin(); vIter != End(); vIter++) {
+            if(!(*vIter)->IsVisited()) {
+                DynamicArraySeq<Vertex<T>*> connectedComponent;
+                DepthFirstSearch((*vIter), connectedComponent);
+                res.InsertLast(connectedComponent);
+            } else {
+                /* DO NOTHING */
+            }
+        }
+
+        return res;
     }
 };
