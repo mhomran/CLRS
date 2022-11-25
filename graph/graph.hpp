@@ -47,26 +47,42 @@ class Graph {
         }
     }
 
-    void 
+    bool
     DepthFirstSearch(Vertex<T>* src, 
-    DynamicArraySeq<Vertex<T>*>& connectedComponent) {
+    DynamicArraySeq<Vertex<T>*>& TopologicalOrder) {
+        bool isDAG = true;
         for(auto edge = src->Begin(); edge != src->End(); edge++) {
             if(! (*edge).GetDst()->IsVisited()) {
                 (*edge).GetDst()->SetParent(src);
                 (*edge).GetDst()->SetVisited(true);
-                DepthFirstSearch((*edge).GetDst(), connectedComponent);
+                (*edge).GetDst()->SetIsInCurrentDAG(true);
+                if(!DepthFirstSearch((*edge).GetDst(), TopologicalOrder)) {
+                    isDAG = false;
+                } else {
+                    /* DO NOTHING */
+                }
             } else {
-                /* not a DAG*/
-                cout << "backward edge: " << (*edge) << endl;
+                if((*edge).GetDst()->IsInCurrentDAG()) {
+                    isDAG = false;
+                } else {
+                    /* DO NOTHING */
+                }
             }
         }
+
+        src->SetIsInCurrentDAG(false);
         
-        connectedComponent.InsertLast(src);
+        TopologicalOrder.InsertFirst(src);
+
+        return isDAG;
     }
 
-    void MakeVerticesNotVisited(void) {
+    void InitializeVertices(void) {
         for(auto vIter = Begin(); vIter != End(); vIter++) {
+            (*vIter)->SetParent(NULL);
             (*vIter)->SetVisited(false);
+            (*vIter)->SetShortestDistance(INT_MAX);
+            (*vIter)->SetIsInCurrentDAG(false);
         }
     }
 
@@ -93,27 +109,34 @@ class Graph {
         return end;
     }
 
-    DynamicArraySeq<Vertex<T>*> UnweightedShortestPath(Vertex<T>* src, Vertex<T>* dst) {
-        DynamicArraySeq<Vertex<T>*> path;
+    bool UnweightedShortestPath(Vertex<T>* src, 
+    Vertex<T>* dst, DynamicArraySeq<Vertex<T>*>& path) {
         Vertex<T>* iter = dst;
+        bool isReachable;
 
-        MakeVerticesNotVisited();
+        InitializeVertices();
         BreadthFirstSearch(src);
         
         path.InsertFirst(dst);
-        while(iter != src) {
+        while(NULL != iter && iter != src) {
             iter = iter->GetParent();
             path.InsertFirst(iter);
         }
 
-        return path;
+        if(NULL == iter) {
+            isReachable = false;
+        } else {
+            isReachable = true;
+        }
+
+        return isReachable;
     }
 
     DynamicArraySeq<DynamicArraySeq<Vertex<T>*>> 
     GetConnectedComponents(void) {
         DynamicArraySeq<DynamicArraySeq<Vertex<T>*>> res;
         
-        MakeVerticesNotVisited();
+        InitializeVertices();
         
         for(auto vIter = Begin(); vIter != End(); vIter++) {
             if(!(*vIter)->IsVisited()) {
@@ -128,5 +151,38 @@ class Graph {
         }
 
         return res;
+    }
+
+    bool
+    DAGRelaxation(Vertex<T>* src, Vertex<T>* dst, 
+    DynamicArraySeq<Vertex<T>*>& path) {
+        bool isDAG;
+        DynamicArraySeq<Vertex<T>*> topologicalOrder;
+        Vertex<T>* iter = dst;
+
+        InitializeVertices();
+
+        src->SetVisited(true);
+        src->SetIsInCurrentDAG(true);
+        src->SetParent(src);
+        src->SetShortestDistance(0);
+
+        isDAG = DepthFirstSearch(src, topologicalOrder);
+
+        if(isDAG) {
+            for(auto v = topologicalOrder.Begin(); v != topologicalOrder.End(); v++) {
+                (*v)->RelaxEdges();
+            }
+            
+            path.InsertFirst(dst);
+            while(NULL != iter && iter != src) {
+                iter = iter->GetParent();
+                path.InsertFirst(iter);
+            }
+        } else {
+            /* DO NOTHING */
+        }
+
+        return isDAG;
     }
 };

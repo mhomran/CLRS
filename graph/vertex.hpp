@@ -70,6 +70,7 @@ class Vertex {
     int idx;
 
     bool visited;
+    bool isInCurrentDAG;
     int shortestDistance;
     Vertex<T>* parent;
 
@@ -104,6 +105,14 @@ class Vertex {
         return this->visited;
     }
 
+    void SetIsInCurrentDAG(bool isInCurrentDAG) {
+        this->isInCurrentDAG = isInCurrentDAG;
+    }
+
+    bool IsInCurrentDAG(void) {
+        return this->isInCurrentDAG;
+    }
+
     void SetParent(Vertex<T>* parent) {
         this->parent = parent;
     }
@@ -116,8 +125,8 @@ class Vertex {
         this->shortestDistance = shortestDistance;
     }
 
-    int SetShortestDistance(void) {
-        return this->SetShortestDistance;
+    int GetShortestDistance(void) {
+        return this->shortestDistance;
     }
 
     void AddEdgeTo(Vertex<T>* tobeInsertedVertex, int weight=1) {
@@ -159,5 +168,16 @@ class Vertex {
     friend ostream & operator << (ostream &out, const Vertex &c) {
         out << c.idx << "," << c.item;
         return out;
+    }
+
+    void RelaxEdges(void) {
+        for(auto edge = Begin(); edge != End(); edge++) {
+            if((*edge).GetDst()->GetShortestDistance() > this->shortestDistance + (*edge).GetWeight()){
+                (*edge).GetDst()->SetShortestDistance(this->shortestDistance + (*edge).GetWeight());
+                (*edge).GetDst()->SetParent(this);
+            } else {
+                /* DO NOTHING */
+            }
+        }
     }
 };

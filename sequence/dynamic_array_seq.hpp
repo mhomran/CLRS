@@ -65,11 +65,7 @@ class DynamicArraySeq : public Sequence<T> {
         T* newArray;
         int i;
         if(0 == n) {
-            delete[] array;
-            array = NULL;
-            lower = 0;
-            upper = 0;
-            length = 0;
+            this->Clean();
         } else {
             if(this->lower < n && n < this->upper) {
                 /* DO NOTHING */
@@ -90,6 +86,14 @@ class DynamicArraySeq : public Sequence<T> {
             }
         }
     }
+
+    void Swap(T& x, T& y) {
+        T temp;
+        temp = x;
+        x = y;
+        y = temp;
+    }
+
     public:
     
     /**
@@ -137,6 +141,15 @@ class DynamicArraySeq : public Sequence<T> {
      */
     ~DynamicArraySeq(void) {
         if(NULL != array) delete[] array;
+    }
+
+    void Clean(void) {
+        if(NULL != array) delete[] array;
+        array = NULL;
+        size = 0;
+        lower = 0;
+        upper = 0;
+        length = 0;
     }
 
     /**
@@ -198,7 +211,7 @@ class DynamicArraySeq : public Sequence<T> {
         int i;
 
         Resize(size-1);
-        size -= 1; // update size
+        size = size - 1 < 0 ? 0 : size - 1; // update size
 
         for(i = 0; i < size; i++) {
             array[i] = array[i+1];
@@ -222,7 +235,7 @@ class DynamicArraySeq : public Sequence<T> {
      */
     virtual void DeleteLast(void) {
         Resize(size-1);
-        size -= 1; // update size
+        size = size - 1 < 0 ? 0 : size - 1; // update size
     }
 
     /**
@@ -254,7 +267,7 @@ class DynamicArraySeq : public Sequence<T> {
         int j;
 
         Resize(size-1);
-        size -= 1; // update size
+        size = size - 1 < 0 ? 0 : size - 1; // update size
 
         for(j = i; j < size; j++) {
             array[j] = array[j+1];
@@ -313,6 +326,13 @@ class DynamicArraySeq : public Sequence<T> {
 
     bool isEmpty(void) {
         return this->GetSize() == 0;
+    }
+
+    void Reverse(void) {
+        int i;
+        for(i = 0; i < size / 2; i++) {
+            Swap(array[i], array[size - i - 1]);
+        }
     }
 
     friend ostream & operator << (ostream &out, const DynamicArraySeq &c) {
