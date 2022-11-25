@@ -2,6 +2,55 @@
 
 #include "../set/hash_table_set.hpp"
 
+template<class T>
+class Vertex;
+
+template<class T>
+class Edge {
+    Vertex<T>* src;
+    Vertex<T>* dst;
+    int weight;
+    public:
+
+    Edge(void) {
+        src = NULL;
+        dst = NULL;
+        weight = 1;
+    }
+
+    Edge(Vertex<T>* src, Vertex<T>* dst, int weight) 
+    : src(src), dst(dst), weight(weight) {
+        /* DO NOTHING */
+    }
+
+    void SetSrc(Vertex<T>* src) {
+        this->src = src;
+    }
+    void SetDst(Vertex<T>* dst) {
+        this->dst = dst;
+    }
+    void SetWeight(int weight) {
+        this->weight = weight;
+    }
+    
+    Vertex<T>* Getsrc(void) {
+        return this->src;
+    }
+    Vertex<T>* GetDst(void) {
+        return this->dst;
+    }
+    int GetWeight(void) {
+        return this->weight;
+    }
+
+    friend ostream & operator << (ostream &out, const Edge &c) {
+        out << "(" << *c.src << ") ";
+        out << "-" << c.weight << "-> ";
+        out << "(" << *c.dst << ") ";
+        return out;
+    }
+};
+
 template <class T>
 class VertexIter : public HashTableSetIter<T> {
     public:
@@ -24,7 +73,7 @@ class Vertex {
     int shortestDistance;
     Vertex<T>* parent;
 
-    HashTableSet<Vertex<T>*> adjList;
+    HashTableSet<Edge<T>> adjList;
 
     public:
     Vertex() {
@@ -71,31 +120,32 @@ class Vertex {
         return this->SetShortestDistance;
     }
 
-    void AddEdgeTo(Vertex<T>* tobeInsertedVertex) {
-        Pair<Vertex<T>*> tobeInsertedPair;
+    void AddEdgeTo(Vertex<T>* tobeInsertedVertex, int weight=1) {
+        Pair<Edge<T>> tobeInsertedPair;
+        Edge<T> tobeInsertedEdge(this, tobeInsertedVertex, weight);
 
         if(NULL != tobeInsertedVertex) {
             tobeInsertedPair.SetKey(tobeInsertedVertex->GetIdx());
-            tobeInsertedPair.SetItem(tobeInsertedVertex);
+            tobeInsertedPair.SetItem(tobeInsertedEdge);
             adjList.Insert(tobeInsertedPair);
         } else {
             /* DO NOTHING */
         }
     }
 
-    VertexIter<Vertex<T>*> Begin(void) {
-        VertexIter<Vertex<T>*> begin = VertexIter<Vertex<T>*>(adjList.Begin());
+    VertexIter<Edge<T>> Begin(void) {
+        VertexIter<Edge<T>> begin = VertexIter<Edge<T>>(adjList.Begin());
         return begin;
     }
 
-    VertexIter<Vertex<T>*> End(void) {
-        VertexIter<Vertex<T>*> end = VertexIter<Vertex<T>*>(adjList.End());
+    VertexIter<Edge<T>> End(void) {
+        VertexIter<Edge<T>> end = VertexIter<Edge<T>>(adjList.End());
         return end;
     }
 
     bool HasEdgeTo (int idx) {
         bool res;
-        Pair<Vertex<T>*> found = adjList.Find(idx);
+        Pair<Edge<T>> found = adjList.Find(idx);
 
         if(-1 == found.GetKey()) {
             res = false;

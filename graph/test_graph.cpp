@@ -16,10 +16,10 @@ int main() {
         graph.InsertVertex(&vertices[i]);
     }
 
-    vertices[0].AddEdgeTo(&vertices[1]);
-    vertices[1].AddEdgeTo(&vertices[2]);
-    vertices[1].AddEdgeTo(&vertices[3]);
-    vertices[2].AddEdgeTo(&vertices[3]);
+    vertices[0].AddEdgeTo(&vertices[1], 20);
+    vertices[1].AddEdgeTo(&vertices[2], 10);
+    vertices[1].AddEdgeTo(&vertices[3], -5);
+    vertices[2].AddEdgeTo(&vertices[3], -1);
 
     cout << "The graph has vertices:\n";
     for(auto vIter = graph.Begin(); vIter != graph.End(); vIter++) {
@@ -28,7 +28,7 @@ int main() {
 
     cout << "The first vertex (0,a) is connected to:\n";
     for(auto adjListIter = vertices[0].Begin(); adjListIter != vertices[0].End(); adjListIter++) {
-        cout << (*adjListIter)->GetItem() << endl;
+        cout << (*adjListIter) << endl;
     }
 
     cout << "Check if the first vertex has an edge to itself\n";

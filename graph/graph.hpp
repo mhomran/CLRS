@@ -35,11 +35,11 @@ class Graph {
             curr = queue.GetAt(0);
             queue.DeleteFirst();
 
-            for(auto adjListIter = curr->Begin(); adjListIter != curr->End(); adjListIter++) {
-                if(! (*adjListIter)->IsVisited()) {
-                    (*adjListIter)->SetParent(curr);
-                    (*adjListIter)->SetVisited(true);
-                    queue.InsertLast(*(adjListIter));
+            for(auto edge = curr->Begin(); edge != curr->End(); edge++) {
+                if(! (*edge).GetDst()->IsVisited()) {
+                    (*edge).GetDst()->SetParent(curr);
+                    (*edge).GetDst()->SetVisited(true);
+                    queue.InsertLast((*edge).GetDst());
                 } else {
                     /* DO NOTHING */
                 }
@@ -50,11 +50,11 @@ class Graph {
     void 
     DepthFirstSearch(Vertex<T>* src, 
     DynamicArraySeq<Vertex<T>*>& connectedComponent) {
-        for(auto adjListIter = src->Begin(); adjListIter != src->End(); adjListIter++) {
-            if(! (*adjListIter)->IsVisited()) {
-                (*adjListIter)->SetParent(src);
-                (*adjListIter)->SetVisited(true);
-                DepthFirstSearch((*adjListIter), connectedComponent);
+        for(auto edge = src->Begin(); edge != src->End(); edge++) {
+            if(! (*edge).GetDst()->IsVisited()) {
+                (*edge).GetDst()->SetParent(src);
+                (*edge).GetDst()->SetVisited(true);
+                DepthFirstSearch((*edge).GetDst(), connectedComponent);
             }
         }
         
