@@ -45,7 +45,7 @@ class Edge {
 
     friend ostream & operator << (ostream &out, const Edge &c) {
         out << "(" << *c.src << ") ";
-        out << "-" << c.weight << "-> ";
+        out << "-(" << c.weight << ")-> ";
         out << "(" << *c.dst << ") ";
         return out;
     }

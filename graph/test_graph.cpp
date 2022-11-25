@@ -20,6 +20,7 @@ int main() {
     vertices[1].AddEdgeTo(&vertices[2], 10);
     vertices[1].AddEdgeTo(&vertices[3], -5);
     vertices[2].AddEdgeTo(&vertices[3], -1);
+    vertices[3].AddEdgeTo(&vertices[0], -1);
 
     cout << "The graph has vertices:\n";
     for(auto vIter = graph.Begin(); vIter != graph.End(); vIter++) {
@@ -63,9 +64,8 @@ int main() {
     }
     cout << endl;
 
-    connectedComponents = graph.GetConnectedComponents();
-
     cout << "The connected components are:\n";
+    connectedComponents = graph.GetConnectedComponents();
     
     i = 0;
     for(auto cc = connectedComponents.Begin(); cc != connectedComponents.End(); cc++, i++) {

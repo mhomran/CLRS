@@ -55,6 +55,9 @@ class Graph {
                 (*edge).GetDst()->SetParent(src);
                 (*edge).GetDst()->SetVisited(true);
                 DepthFirstSearch((*edge).GetDst(), connectedComponent);
+            } else {
+                /* not a DAG*/
+                cout << "backward edge: " << (*edge) << endl;
             }
         }
         
@@ -115,6 +118,8 @@ class Graph {
         for(auto vIter = Begin(); vIter != End(); vIter++) {
             if(!(*vIter)->IsVisited()) {
                 DynamicArraySeq<Vertex<T>*> connectedComponent;
+                (*vIter)->SetVisited(true);
+                (*vIter)->SetParent((*vIter));
                 DepthFirstSearch((*vIter), connectedComponent);
                 res.InsertLast(connectedComponent);
             } else {
