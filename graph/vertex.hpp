@@ -170,14 +170,17 @@ class Vertex {
         return out;
     }
 
-    void RelaxEdges(void) {
+    bool RelaxEdges(void) {
+        bool relaxable = false;
         for(auto edge = Begin(); edge != End(); edge++) {
             if((*edge).GetDst()->GetShortestDistance() > this->shortestDistance + (*edge).GetWeight()){
                 (*edge).GetDst()->SetShortestDistance(this->shortestDistance + (*edge).GetWeight());
                 (*edge).GetDst()->SetParent(this);
+                relaxable = true;
             } else {
                 /* DO NOTHING */
             }
         }
+        return relaxable;
     }
 };

@@ -22,8 +22,8 @@ int main() {
     vertices[0].AddEdgeTo(&vertices[1], 20);
     vertices[1].AddEdgeTo(&vertices[2], 10);
     vertices[1].AddEdgeTo(&vertices[3], -5);
-    vertices[2].AddEdgeTo(&vertices[3], -1);
-    vertices[3].AddEdgeTo(&vertices[0], -1);
+    vertices[2].AddEdgeTo(&vertices[3], -16);
+    vertices[3].AddEdgeTo(&vertices[0], -15);
 
     cout << "The graph has vertices:\n";
     for(auto vIter = graph.Begin(); vIter != graph.End(); vIter++) {
@@ -139,5 +139,12 @@ int main() {
         cout << endl;
     } else {
         cout << "The graph is not a DAG !" << endl;
+    }
+
+    cout << "check if the graph has a negative weighted cycle\n";
+    if(graph.HasNegativeCycle()) {
+        cout << "The graph has a negative weighted cycle\n";
+    } else {
+        cout << "The graph doesn't have a negative weighted cycle\n";
     }
 }

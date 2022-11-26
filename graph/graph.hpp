@@ -185,4 +185,33 @@ class Graph {
 
         return isDAG;
     }
+
+    bool HasNegativeCycle(void) {
+        bool hasNegativeCycle = false;
+        bool relaxable;
+
+        InitializeVertices();
+
+        auto start = *this->Begin();
+        start->SetShortestDistance(0);
+        start->SetParent(start);
+
+        for(auto uIter = this->Begin(); uIter != this->End(); uIter++) {
+            for(auto vIter = this->Begin(); vIter != this->End(); vIter++) {
+                (*vIter)->RelaxEdges();
+            }
+        }
+
+        for(auto vIter = this->Begin(); vIter != this->End(); vIter++) {
+            relaxable = (*vIter)->RelaxEdges();
+            if(relaxable) {
+                hasNegativeCycle = true;
+                break;
+            } else {
+                /* DO NOTHING */
+            }
+        }
+
+        return hasNegativeCycle;
+    }
 };
