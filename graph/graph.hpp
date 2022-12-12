@@ -3,7 +3,7 @@
 #include "../set/hash_table_set.hpp"
 #include "vertex.hpp"
 #include "../sequence/dynamic_array_seq.hpp"
-
+#include "priority_queue.hpp"
 
 template <class T>
 class GraphIter : public HashTableSetIter<T> {
@@ -91,7 +91,7 @@ class Graph {
         Pair<Vertex<T>*> tobeInsertedPair;
 
         if(NULL != tobeInsertedVertex) {
-            tobeInsertedPair.SetKey(tobeInsertedVertex->GetIdx());
+            tobeInsertedPair.SetKey(tobeInsertedVertex->GetId());
             tobeInsertedPair.SetItem(tobeInsertedVertex);
             vertices.Insert(tobeInsertedPair);
         } else {
@@ -174,11 +174,12 @@ class Graph {
                 (*v)->RelaxEdges();
             }
             
-            path.InsertFirst(dst);
+            path.InsertLast(dst);
             while(NULL != iter && iter != src) {
                 iter = iter->GetParent();
-                path.InsertFirst(iter);
+                path.InsertLast(iter);
             }
+            path.Reverse();
         } else {
             /* DO NOTHING */
         }
@@ -213,5 +214,60 @@ class Graph {
         }
 
         return hasNegativeCycle;
+    }
+
+    bool Dijkstra(Vertex<T>* src, Vertex<T>* dst, 
+    DynamicArraySeq<Vertex<T>*>& path) {
+        PriorityQueue<T> pq;
+        bool hasNegativeWeights = true;
+        Vertex<T>* iter;
+
+        InitializeVertices();
+
+        auto start = *this->Begin();
+        start->SetShortestDistance(0);
+        start->SetParent(start);
+
+        for(auto vIter = this->Begin(); vIter != this->End(); vIter++) {
+            pq.Insert((*vIter));
+        }
+        
+        for(auto vIter = this->Begin(); vIter != this->End(); vIter++) {
+            iter = pq.DeleteMin();
+
+            for(auto edge = iter->Begin(); edge != iter->End(); edge++) {
+                if((*edge).GetDst()->GetShortestDistance() > 
+                    (*edge).GetSrc()->GetShortestDistance() + (*edge).GetWeight()){
+                    
+                    if((*edge).GetWeight() < 0) {
+                        hasNegativeWeights = false;
+                        break;
+                    } else {
+                        (*edge).GetDst()->SetShortestDistance((*edge).GetSrc()->GetShortestDistance() + (*edge).GetWeight());
+                        (*edge).GetDst()->SetParent((*edge).GetSrc());
+                        pq.DecreaseKey((*edge).GetDst(), (*edge).GetDst()->GetShortestDistance());
+                    }
+                
+                } else {
+                    /* DO NOTHING */
+                }
+            }
+
+            if(!hasNegativeWeights) {
+                break;
+            } else {
+                /* DO NOTHING */
+            }
+        }
+
+        iter = dst;
+        path.InsertLast(dst);
+        while(NULL != iter && iter != src) {
+            iter = iter->GetParent();
+            path.InsertLast(iter);
+        }
+        path.Reverse();
+
+        return hasNegativeWeights;
     }
 };

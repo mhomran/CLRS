@@ -7,14 +7,17 @@ int main() {
     size_t i;
     Graph<char> graph;
     Vertex<char> vertices[5];
+    Graph<int> largeGraph;
+    Vertex<int> largeGraphVertices[9];
     Graph<char> DAG;
     Vertex<char> DAGVertices[4];
     DynamicArraySeq<Vertex<char>*> shortestPath;
+    DynamicArraySeq<Vertex<int>*> shortestPath2;
     DynamicArraySeq<DynamicArraySeq<Vertex<char>*>> connectedComponents;
-    bool isReachable, isDAG;
+    bool isReachable, isDAG, hasPostiveWeights;
 
     for(i = 0; i < SizeOfArray(vertices); i++) {
-        vertices[i].SetIdx(i);
+        vertices[i].SetId(i);
         vertices[i].SetItem(i + 'a');
         graph.InsertVertex(&vertices[i]);
     }
@@ -114,7 +117,7 @@ int main() {
     cout << endl << "Let's make a DAG" << endl;
     
     for(i = 0; i < SizeOfArray(DAGVertices); i++) {
-        DAGVertices[i].SetIdx(i);
+        DAGVertices[i].SetId(i);
         DAGVertices[i].SetItem(i + 'a');
         DAG.InsertVertex(&DAGVertices[i]);
     }
@@ -147,4 +150,99 @@ int main() {
     } else {
         cout << "The graph doesn't have a negative weighted cycle\n";
     }
+
+    cout << endl << "Test dijkstra on the DAG:" << endl;
+    
+    shortestPath.Clean();
+    hasPostiveWeights = DAG.Dijkstra(&DAGVertices[0], &DAGVertices[3], shortestPath);
+    
+    if(!hasPostiveWeights) {
+        cout << "The graph has negative weights !!" << endl;
+    } else {
+        cout << "The shortest path is:\n";
+        for(auto vPtr = shortestPath.Begin(); vPtr != shortestPath.End(); vPtr++) {
+            if(NULL != *vPtr) cout << **vPtr << endl;
+            else cout << "NULL !" << endl;
+        }
+        cout << endl;
+    }
+
+    cout << endl << "Test dijkstra on the graph:" << endl;
+    
+    shortestPath.Clean();
+    hasPostiveWeights = graph.Dijkstra(&DAGVertices[0], &DAGVertices[3], shortestPath);
+    
+    if(!hasPostiveWeights) {
+        cout << "The graph has negative weights !!" << endl;
+    } else {
+        cout << "The shortest path is:\n";
+        for(auto vPtr = shortestPath.Begin(); vPtr != shortestPath.End(); vPtr++) {
+            if(NULL != *vPtr) cout << **vPtr << endl;
+            else cout << "NULL !" << endl;
+        }
+        cout << endl;
+    }
+
+    cout << endl << "Test dijkstra on the large graph:" << endl;
+    
+
+    for(i = 0; i < SizeOfArray(largeGraphVertices); i++) {
+        largeGraphVertices[i].SetId(i);
+        largeGraphVertices[i].SetItem(i);
+        largeGraph.InsertVertex(&largeGraphVertices[i]);
+    }
+
+    largeGraphVertices[0].AddEdgeTo(&largeGraphVertices[1], 4);
+    largeGraphVertices[0].AddEdgeTo(&largeGraphVertices[7], 8);
+    
+    largeGraphVertices[1].AddEdgeTo(&largeGraphVertices[0], 4);
+    largeGraphVertices[1].AddEdgeTo(&largeGraphVertices[2], 8);
+    largeGraphVertices[1].AddEdgeTo(&largeGraphVertices[7], 11);
+    
+    largeGraphVertices[2].AddEdgeTo(&largeGraphVertices[8], 2);
+    largeGraphVertices[2].AddEdgeTo(&largeGraphVertices[3], 7);
+    largeGraphVertices[2].AddEdgeTo(&largeGraphVertices[3], 7);
+    largeGraphVertices[2].AddEdgeTo(&largeGraphVertices[1], 8);
+    
+    largeGraphVertices[3].AddEdgeTo(&largeGraphVertices[5], 14);
+    largeGraphVertices[3].AddEdgeTo(&largeGraphVertices[2], 7);
+    largeGraphVertices[3].AddEdgeTo(&largeGraphVertices[4], 9);
+ 
+    largeGraphVertices[4].AddEdgeTo(&largeGraphVertices[3], 9);
+    largeGraphVertices[4].AddEdgeTo(&largeGraphVertices[10], 5);
+
+    largeGraphVertices[5].AddEdgeTo(&largeGraphVertices[2], 4);
+    largeGraphVertices[5].AddEdgeTo(&largeGraphVertices[3], 14);
+    largeGraphVertices[5].AddEdgeTo(&largeGraphVertices[4], 10);
+
+    largeGraphVertices[6].AddEdgeTo(&largeGraphVertices[7], 1);
+    largeGraphVertices[6].AddEdgeTo(&largeGraphVertices[8], 6);
+    largeGraphVertices[6].AddEdgeTo(&largeGraphVertices[5], 2);
+
+    largeGraphVertices[7].AddEdgeTo(&largeGraphVertices[0], 8);
+    largeGraphVertices[7].AddEdgeTo(&largeGraphVertices[1], 11);
+    largeGraphVertices[7].AddEdgeTo(&largeGraphVertices[8], 7);
+    largeGraphVertices[7].AddEdgeTo(&largeGraphVertices[6], 1);
+
+    largeGraphVertices[8].AddEdgeTo(&largeGraphVertices[2], 2);
+    largeGraphVertices[8].AddEdgeTo(&largeGraphVertices[7], 7);
+    largeGraphVertices[8].AddEdgeTo(&largeGraphVertices[6], 6);
+
+    shortestPath2.Clean();
+    hasPostiveWeights = largeGraph.Dijkstra(&largeGraphVertices[0], &largeGraphVertices[4], shortestPath2);
+    
+    if(!hasPostiveWeights) {
+        cout << "The graph has negative weights !!" << endl;
+    } else {
+        cout << "The shortest path is:\n";
+        for(auto vPtr = shortestPath2.Begin(); vPtr != shortestPath2.End(); vPtr++) {
+            if(NULL != *vPtr) cout << **vPtr << endl;
+            else cout << "NULL !" << endl;
+        }
+
+        cout << "check correct answers on " << endl;
+        cout << "https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-greedy-algo-7/" << endl;
+        cout << endl;
+    }
+
 }

@@ -33,7 +33,7 @@ class Edge {
         this->weight = weight;
     }
     
-    Vertex<T>* Getsrc(void) {
+    Vertex<T>* GetSrc(void) {
         return this->src;
     }
     Vertex<T>* GetDst(void) {
@@ -67,6 +67,7 @@ class VertexIter : public HashTableSetIter<T> {
 template <class T>
 class Vertex {
     T item;
+    int id;
     int idx;
 
     bool visited;
@@ -95,6 +96,14 @@ class Vertex {
 
     int GetIdx(void) {
         return this->idx;
+    }
+
+    void SetId(int id) {
+        this->id = id;
+    }
+
+    int GetId(void) {
+        return this->id;
     }
     
     void SetVisited(bool visited) {
@@ -134,7 +143,7 @@ class Vertex {
         Edge<T> tobeInsertedEdge(this, tobeInsertedVertex, weight);
 
         if(NULL != tobeInsertedVertex) {
-            tobeInsertedPair.SetKey(tobeInsertedVertex->GetIdx());
+            tobeInsertedPair.SetKey(tobeInsertedVertex->GetId());
             tobeInsertedPair.SetItem(tobeInsertedEdge);
             adjList.Insert(tobeInsertedPair);
         } else {
@@ -152,9 +161,9 @@ class Vertex {
         return end;
     }
 
-    bool HasEdgeTo (int idx) {
+    bool HasEdgeTo (int id) {
         bool res;
-        Pair<Edge<T>> found = adjList.Find(idx);
+        Pair<Edge<T>> found = adjList.Find(id);
 
         if(-1 == found.GetKey()) {
             res = false;
@@ -166,7 +175,7 @@ class Vertex {
     }
 
     friend ostream & operator << (ostream &out, const Vertex &c) {
-        out << c.idx << "," << c.item;
+        out << c.id << "," << c.item;
         return out;
     }
 
