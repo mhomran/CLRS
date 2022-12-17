@@ -14,10 +14,9 @@ int main() {
     DynamicArraySeq<Vertex<char>*> shortestPath;
     DynamicArraySeq<Vertex<int>*> shortestPath2;
     DynamicArraySeq<DynamicArraySeq<Vertex<char>*>> connectedComponents;
-    bool isReachable, isDAG, hasPostiveWeights;
+    bool isReachable, isDAG, hasPostiveWeights, hasNegativeCycle;
 
     for(i = 0; i < SizeOfArray(vertices); i++) {
-        vertices[i].SetId(i);
         vertices[i].SetItem(i + 'a');
         graph.InsertVertex(&vertices[i]);
     }
@@ -117,7 +116,6 @@ int main() {
     cout << endl << "Let's make a DAG" << endl;
     
     for(i = 0; i < SizeOfArray(DAGVertices); i++) {
-        DAGVertices[i].SetId(i);
         DAGVertices[i].SetItem(i + 'a');
         DAG.InsertVertex(&DAGVertices[i]);
     }
@@ -145,10 +143,18 @@ int main() {
     }
 
     cout << "check if the graph has a negative weighted cycle\n";
-    if(graph.HasNegativeCycle()) {
+    shortestPath.Clean();
+    hasNegativeCycle = DAG.BellmanFord(&DAGVertices[0], &DAGVertices[3], shortestPath);
+    
+    if(hasNegativeCycle) {
         cout << "The graph has a negative weighted cycle\n";
     } else {
         cout << "The graph doesn't have a negative weighted cycle\n";
+        for(auto vPtr = shortestPath.Begin(); vPtr != shortestPath.End(); vPtr++) {
+            if(NULL != *vPtr) cout << **vPtr << endl;
+            else cout << "NULL !" << endl;
+        }
+        cout << endl;
     }
 
     cout << endl << "Test dijkstra on the DAG:" << endl;
@@ -170,7 +176,7 @@ int main() {
     cout << endl << "Test dijkstra on the graph:" << endl;
     
     shortestPath.Clean();
-    hasPostiveWeights = graph.Dijkstra(&DAGVertices[0], &DAGVertices[3], shortestPath);
+    hasPostiveWeights = DAG.Dijkstra(&DAGVertices[0], &DAGVertices[3], shortestPath);
     
     if(!hasPostiveWeights) {
         cout << "The graph has negative weights !!" << endl;
@@ -187,7 +193,6 @@ int main() {
     
 
     for(i = 0; i < SizeOfArray(largeGraphVertices); i++) {
-        largeGraphVertices[i].SetId(i);
         largeGraphVertices[i].SetItem(i);
         largeGraph.InsertVertex(&largeGraphVertices[i]);
     }
@@ -201,7 +206,6 @@ int main() {
     
     largeGraphVertices[2].AddEdgeTo(&largeGraphVertices[8], 2);
     largeGraphVertices[2].AddEdgeTo(&largeGraphVertices[3], 7);
-    largeGraphVertices[2].AddEdgeTo(&largeGraphVertices[3], 7);
     largeGraphVertices[2].AddEdgeTo(&largeGraphVertices[1], 8);
     
     largeGraphVertices[3].AddEdgeTo(&largeGraphVertices[5], 14);
@@ -209,10 +213,11 @@ int main() {
     largeGraphVertices[3].AddEdgeTo(&largeGraphVertices[4], 9);
  
     largeGraphVertices[4].AddEdgeTo(&largeGraphVertices[3], 9);
-    largeGraphVertices[4].AddEdgeTo(&largeGraphVertices[10], 5);
+    largeGraphVertices[4].AddEdgeTo(&largeGraphVertices[5], 10);
 
     largeGraphVertices[5].AddEdgeTo(&largeGraphVertices[2], 4);
     largeGraphVertices[5].AddEdgeTo(&largeGraphVertices[3], 14);
+    largeGraphVertices[5].AddEdgeTo(&largeGraphVertices[6], 2);
     largeGraphVertices[5].AddEdgeTo(&largeGraphVertices[4], 10);
 
     largeGraphVertices[6].AddEdgeTo(&largeGraphVertices[7], 1);
@@ -245,4 +250,12 @@ int main() {
         cout << endl;
     }
 
+    cout << endl << "Test Johnson algorithm" << endl;
+    hasNegativeCycle = largeGraph.Johnson();
+
+    if(hasNegativeCycle) {
+        cout << "The graph has a negative cycle";
+    } else {
+        /* DO NOTHING */
+    }
 }

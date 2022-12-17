@@ -165,8 +165,15 @@ class HashTableSet : public Set<T> {
      */
     virtual Pair<T> Find(int k) {
         int h;
-        h = Hash(k, length);
-        return array[h].Find(k);
+        Pair<T> res;
+        if(length > 0) {
+            h = Hash(k, length);
+            res = array[h].Find(k);
+        } else {
+            /* DO NOTHING */
+        }
+
+        return res; 
     }
 
     /**

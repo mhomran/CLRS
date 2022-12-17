@@ -36,10 +36,10 @@ class Graph {
             queue.DeleteFirst();
 
             for(auto edge = curr->Begin(); edge != curr->End(); edge++) {
-                if(! (*edge).GetDst()->IsVisited()) {
-                    (*edge).GetDst()->SetParent(curr);
-                    (*edge).GetDst()->SetVisited(true);
-                    queue.InsertLast((*edge).GetDst());
+                if(! (*edge)->GetDst()->IsVisited()) {
+                    (*edge)->GetDst()->SetParent(curr);
+                    (*edge)->GetDst()->SetVisited(true);
+                    queue.InsertLast((*edge)->GetDst());
                 } else {
                     /* DO NOTHING */
                 }
@@ -52,17 +52,17 @@ class Graph {
     DynamicArraySeq<Vertex<T>*>& TopologicalOrder) {
         bool isDAG = true;
         for(auto edge = src->Begin(); edge != src->End(); edge++) {
-            if(! (*edge).GetDst()->IsVisited()) {
-                (*edge).GetDst()->SetParent(src);
-                (*edge).GetDst()->SetVisited(true);
-                (*edge).GetDst()->SetIsInCurrentDAG(true);
-                if(!DepthFirstSearch((*edge).GetDst(), TopologicalOrder)) {
+            if(! (*edge)->GetDst()->IsVisited()) {
+                (*edge)->GetDst()->SetParent(src);
+                (*edge)->GetDst()->SetVisited(true);
+                (*edge)->GetDst()->SetIsInCurrentDAG(true);
+                if(!DepthFirstSearch((*edge)->GetDst(), TopologicalOrder)) {
                     isDAG = false;
                 } else {
                     /* DO NOTHING */
                 }
             } else {
-                if((*edge).GetDst()->IsInCurrentDAG()) {
+                if((*edge)->GetDst()->IsInCurrentDAG()) {
                     isDAG = false;
                 } else {
                     /* DO NOTHING */
@@ -83,6 +83,18 @@ class Graph {
             (*vIter)->SetVisited(false);
             (*vIter)->SetShortestDistance(INT_MAX);
             (*vIter)->SetIsInCurrentDAG(false);
+        }
+    }
+
+    void JohnsonReweighting(void){
+        int newWeight;
+        for(auto vIter = this->Begin(); vIter != this->End(); vIter++) {
+            for(auto edge = (*vIter)->Begin(); edge != (*vIter)->End(); edge++) {
+                newWeight = (*edge)->GetWeight();
+                newWeight += (*edge)->GetSrc()->GetShortestDistance();
+                newWeight -= (*edge)->GetDst()->GetShortestDistance();
+                (*edge)->SetWeight(newWeight);
+            }
         }
     }
 
@@ -187,9 +199,11 @@ class Graph {
         return isDAG;
     }
 
-    bool HasNegativeCycle(void) {
+    bool BellmanFord(Vertex<T>* src, Vertex<T>* dst, 
+    DynamicArraySeq<Vertex<T>*>& path) {
         bool hasNegativeCycle = false;
         bool relaxable;
+        Vertex<T>* iter;
 
         InitializeVertices();
 
@@ -213,6 +227,14 @@ class Graph {
             }
         }
 
+        iter = dst;
+        path.InsertLast(dst);
+        while(NULL != iter && iter != src) {
+            iter = iter->GetParent();
+            path.InsertLast(iter);
+        }
+        path.Reverse();
+
         return hasNegativeCycle;
     }
 
@@ -224,9 +246,8 @@ class Graph {
 
         InitializeVertices();
 
-        auto start = *this->Begin();
-        start->SetShortestDistance(0);
-        start->SetParent(start);
+        src->SetShortestDistance(0);
+        src->SetParent(src);
 
         for(auto vIter = this->Begin(); vIter != this->End(); vIter++) {
             pq.Insert((*vIter));
@@ -236,16 +257,17 @@ class Graph {
             iter = pq.DeleteMin();
 
             for(auto edge = iter->Begin(); edge != iter->End(); edge++) {
-                if((*edge).GetDst()->GetShortestDistance() > 
-                    (*edge).GetSrc()->GetShortestDistance() + (*edge).GetWeight()){
+                if((*edge)->GetSrc()->GetShortestDistance() != INT_MAX &&
+                    (*edge)->GetDst()->GetShortestDistance() > 
+                    (*edge)->GetSrc()->GetShortestDistance() + (*edge)->GetWeight()){
                     
-                    if((*edge).GetWeight() < 0) {
+                    if((*edge)->GetWeight() < 0) {
                         hasNegativeWeights = false;
                         break;
                     } else {
-                        (*edge).GetDst()->SetShortestDistance((*edge).GetSrc()->GetShortestDistance() + (*edge).GetWeight());
-                        (*edge).GetDst()->SetParent((*edge).GetSrc());
-                        pq.DecreaseKey((*edge).GetDst(), (*edge).GetDst()->GetShortestDistance());
+                        (*edge)->GetDst()->SetShortestDistance((*edge)->GetSrc()->GetShortestDistance() + (*edge)->GetWeight());
+                        (*edge)->GetDst()->SetParent((*edge)->GetSrc());
+                        pq.DecreaseKey((*edge)->GetDst(), (*edge)->GetDst()->GetShortestDistance());
                     }
                 
                 } else {
@@ -269,5 +291,55 @@ class Graph {
         path.Reverse();
 
         return hasNegativeWeights;
+    }
+
+    bool Johnson(void) {
+        bool hasNegativeCycle;
+        Vertex<T> x;
+        Graph<T> Gx;
+        DynamicArraySeq<Vertex<T>*> sp;
+        DynamicArraySeq<Vertex<T>*> path;
+        Vertex<T>* iter;
+
+        for(auto vIter = this->Begin(); vIter != this->End(); vIter++) {
+            x.AddEdgeTo(*vIter, 0);
+        }
+
+        Gx.InsertVertex(&x);
+        for(auto vIter = this->Begin(); vIter != this->End(); vIter++) {
+            Gx.InsertVertex(*vIter);
+        }
+
+        hasNegativeCycle = Gx.BellmanFord(&x, &x, sp);
+        if(hasNegativeCycle) {
+            hasNegativeCycle = true;
+        } else {
+            hasNegativeCycle = false;
+            Gx.JohnsonReweighting();
+            
+            for(auto vIter = this->Begin(); vIter != this->End(); vIter++) {
+                Dijkstra(*vIter, NULL, sp);
+                
+                for(auto dst = this->Begin(); dst != this->End(); dst++) {
+
+                    path.Clean();
+                    iter = *dst;
+                    path.InsertLast(*dst);
+                    while(NULL != iter && iter != *vIter) {
+                        iter = iter->GetParent();
+                        path.InsertLast(iter);
+                    }
+                    path.Reverse();
+
+                    for(auto vPtr = path.Begin(); vPtr != path.End(); vPtr++) {
+                        if(NULL != *vPtr) cout << **vPtr << endl;
+                        else cout << "NULL !" << endl;
+                    }
+                    cout << endl;
+                }
+            }
+        }
+
+        return hasNegativeCycle;
     }
 };

@@ -75,11 +75,21 @@ class Vertex {
     int shortestDistance;
     Vertex<T>* parent;
 
-    HashTableSet<Edge<T>> adjList;
+    HashTableSet<Edge<T>*> adjList;
+
+    static int idCounter;
 
     public:
     Vertex() {
         parent = NULL;
+        id = idCounter;
+        idCounter++;
+    }
+
+    ~Vertex() {
+        for(auto edge = this->Begin(); edge != this->End(); edge++) {
+            delete *edge;
+        }
     }
 
     void SetItem(T item) {
@@ -139,10 +149,11 @@ class Vertex {
     }
 
     void AddEdgeTo(Vertex<T>* tobeInsertedVertex, int weight=1) {
-        Pair<Edge<T>> tobeInsertedPair;
-        Edge<T> tobeInsertedEdge(this, tobeInsertedVertex, weight);
+        Pair<Edge<T>*> tobeInsertedPair;
+        Edge<T>* tobeInsertedEdge;
 
-        if(NULL != tobeInsertedVertex) {
+        if(NULL != tobeInsertedVertex && !this->HasEdgeTo(tobeInsertedVertex->GetId())) {
+            tobeInsertedEdge = new Edge<T>(this, tobeInsertedVertex, weight);
             tobeInsertedPair.SetKey(tobeInsertedVertex->GetId());
             tobeInsertedPair.SetItem(tobeInsertedEdge);
             adjList.Insert(tobeInsertedPair);
@@ -151,19 +162,19 @@ class Vertex {
         }
     }
 
-    VertexIter<Edge<T>> Begin(void) {
-        VertexIter<Edge<T>> begin = VertexIter<Edge<T>>(adjList.Begin());
+    VertexIter<Edge<T>*> Begin(void) {
+        VertexIter<Edge<T>*> begin = VertexIter<Edge<T>*>(adjList.Begin());
         return begin;
     }
 
-    VertexIter<Edge<T>> End(void) {
-        VertexIter<Edge<T>> end = VertexIter<Edge<T>>(adjList.End());
+    VertexIter<Edge<T>*> End(void) {
+        VertexIter<Edge<T>*> end = VertexIter<Edge<T>*>(adjList.End());
         return end;
     }
 
     bool HasEdgeTo (int id) {
         bool res;
-        Pair<Edge<T>> found = adjList.Find(id);
+        Pair<Edge<T>*> found = adjList.Find(id);
 
         if(-1 == found.GetKey()) {
             res = false;
@@ -182,9 +193,9 @@ class Vertex {
     bool RelaxEdges(void) {
         bool relaxable = false;
         for(auto edge = Begin(); edge != End(); edge++) {
-            if((*edge).GetDst()->GetShortestDistance() > this->shortestDistance + (*edge).GetWeight()){
-                (*edge).GetDst()->SetShortestDistance(this->shortestDistance + (*edge).GetWeight());
-                (*edge).GetDst()->SetParent(this);
+            if((*edge)->GetDst()->GetShortestDistance() > this->shortestDistance + (*edge)->GetWeight()){
+                (*edge)->GetDst()->SetShortestDistance(this->shortestDistance + (*edge)->GetWeight());
+                (*edge)->GetDst()->SetParent(this);
                 relaxable = true;
             } else {
                 /* DO NOTHING */
@@ -193,3 +204,6 @@ class Vertex {
         return relaxable;
     }
 };
+
+template<class T>
+int Vertex<T>::idCounter = 0;
